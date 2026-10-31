@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Citizen of Earth</title>
+<style>
+:root {
+  --site-primary: #174f43;
+  --site-on-primary: #ffffff;
+  --site-secondary: #e8eee9;
+  --site-on-secondary: #18372f;
+  --site-background: #f7f8f5;
+  --site-on-background: #17221e;
+  --site-font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Georgia, "Times New Roman", serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+  --muted: #65716b;
+  --line: #dce3dd;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--site-background); color: var(--site-on-background); font-family: var(--site-font-body); }
+#app { min-height: 100vh; width: 100%; background-color: var(--site-background); color: var(--site-on-background); border-radius: 0; display: flex; flex-direction: column; }
+header { width: min(100% - 48px, 900px); margin: 0 auto; padding: calc(25px * var(--site-spacing-scale)) 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 650; letter-spacing: .02em; }
+.brand-mark { width: 28px; height: 28px; border: 1.5px solid var(--site-primary); border-radius: 50%; display: grid; place-items: center; color: var(--site-primary); font-size: 16px; }
+.header-note { font-size: 12px; color: var(--muted); }
+main { width: min(100% - 40px, 560px); margin: auto; padding: 68px 0 80px; flex: 1; }
+.eyebrow { color: var(--site-primary); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; margin: 0 0 18px; }
+h1 { font-family: var(--site-font-heading); font-size: calc( clamp(42px, 8vw, 68px) * var(--site-heading-scale)); line-height: 1.02; letter-spacing: -.045em; font-weight: 500; margin: 0; }
+.intro { color: var(--muted); font-size: 15px; line-height: 1.7; max-width: 430px; margin: 20px 0 38px; }
+.progress { display: flex; gap: 7px; margin: 0 0 30px; }
+.progress span { height: 3px; flex: 1; background: var(--line); border-radius: 4px; }
+.progress span.active { background: var(--site-primary); }
+.question-card { border: 1px solid var(--line); border-radius: calc(10px * var(--site-radius-scale)); padding: calc(28px * var(--site-spacing-scale)); background: light-dark(#ffffff, #171c19); }
+.step-label { color: var(--muted); font-size: 12px; margin: 0 0 15px; }
+.question { font-family: var(--site-font-heading); font-size: 29px; line-height: 1.2; font-weight: 500; margin: 0 0 28px; letter-spacing: -.02em; }
+.actions { display: flex; gap: 10px; }
+button { font: inherit; cursor: pointer; border-radius: calc(6px * var(--site-radius-scale)); padding: 13px 20px; border: 1px solid var(--site-primary); font-size: 14px; font-weight: 650; transition: background .15s, color .15s; }
+button:focus-visible { outline: 3px solid #9bbeb0; outline-offset: 3px; }
+button.primary { background: var(--site-primary); color: var(--site-on-primary); flex: 1; }
+button.primary:hover { filter: brightness(1.12); }
+button.secondary { background: transparent; color: var(--site-primary); min-width: 100px; }
+button.secondary:hover { background: var(--site-secondary); }
+footer { width: min(100% - 48px, 900px); margin: 0 auto; padding: 18px 0 24px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; display: flex; justify-content: space-between; gap: 12px; }
+.hidden { display: none !important; }
+.result { text-align: center; }
+.seal { width: 112px; height: 112px; border: 1px solid var(--site-primary); border-radius: 50%; margin: 0 auto 28px; display: grid; place-items: center; color: var(--site-primary); }
+.seal svg { width: 72px; height: 72px; }
+.result h1 { font-size: calc(clamp(38px, 7vw, 56px) * var(--site-heading-scale)); }
+.result .intro { margin: 18px auto 30px; }
+.certificate { border: 1px solid var(--site-primary); padding: 26px 20px; margin: 30px 0 22px; background: light-dark(#fff, #171c19); }
+.certificate-label { font-size: 10px; text-transform: uppercase; letter-spacing: .2em; color: var(--muted); }
+.certificate strong { display: block; font-family: var(--site-font-heading); font-size: 28px; font-weight: 500; margin: 10px 0; }
+.certificate p { color: var(--muted); font-size: 12px; margin: 0; line-height: 1.6; }
+.message { font-family: var(--site-font-heading); font-size: 19px; line-height: 1.5; max-width: 430px; margin: 0 auto 28px; }
+.result-actions { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.result-actions button { flex: initial; }
+.denied { text-align: center; padding: 24px 0; }
+.denied h2 { font-family: var(--site-font-heading); font-weight: 500; font-size: 32px; }
+.denied p { color: var(--muted); line-height: 1.65; }
+.details-card { border: 1px solid var(--line); border-radius: calc(10px * var(--site-radius-scale)); padding: calc(28px * var(--site-spacing-scale)); background: light-dark(#ffffff, #171c19); }
+.field { display: block; text-align: left; margin: 0 0 20px; }
+.field span { display: block; font-size: 12px; font-weight: 650; margin: 0 0 8px; }
+.field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 12px; font: inherit; color: var(--site-on-background); background: var(--site-background); }
+.field textarea { min-height: 110px; resize: vertical; }
+.certificate-meta { margin-top: 16px !important; overflow-wrap: anywhere; }
+@media (max-width: 480px) { header { width: calc(100% - 36px); } main { padding: 52px 0 64px; } footer { width: calc(100% - 36px); flex-direction: column; } .question-card { padding: 23px 19px; } }
+@media print { header, footer, .result-actions { display: none; } body, #app { background: white; } main { padding: 30px 0; } }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <div class="brand"><span class="brand-mark">◎</span><span>EARTH CITIZENSHIP</span></div>
+    <span class="header-note">One planet. One humanity.</span>
+  </header>
+  <main>
+    <section id="welcome">
+      <p class="eyebrow">A citizenship for everyone</p>
+      <h1>We all belong<br>here.</h1>
+      <p class="intro">No borders. No passports. No complicated requirements. Just three questions.</p>
+      <button class="primary" id="begin">Begin <span aria-hidden="true">→</span></button>
+    </section>
+    <section id="quiz" class="hidden" aria-live="polite">
+      <p class="eyebrow">A simple declaration</p>
+      <div class="progress" aria-label="Question progress"><span></span><span></span><span></span></div>
+      <div class="question-card">
+        <p class="step-label" id="step">QUESTION 01 / 03</p>
+        <h2 class="question" id="question">Are you human?</h2>
+        <div class="actions">
+          <button class="primary" id="yes">Yes</button>
+          <button class="secondary" id="no">No</button>
+        </div>
+      </div>
+    </section>
+    <section id="success" class="result hidden" aria-live="polite">
+      <div class="seal" aria-label="Earth seal">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <circle cx="50" cy="50" r="43" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M9 50h82M50 7c13 12 20 26 20 43S63 81 50 93M50 7C37 19 30 33 30 50s7 31 20 43M18 27h64M18 73h64" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M36 31l8-5 7 4 1 8-7 5-2 9-8-2-4-8 5-11ZM59 54l10-4 8 7-3 10-9 6-8-8 2-11Z" fill="currentColor" opacity=".18"/>
+        </svg>
+      </div>
+      <p class="eyebrow">Welcome, citizen</p>
+      <h1>You belong<br>to Earth.</h1>
+      <p class="intro">Your answers are all we need.</p>
+      <div class="certificate">
+        <span class="certificate-label">Certificate of belonging</span>
+        <strong>Citizen of Earth</strong>
+        <p id="certificate-name">Granted to a human being<br>of planet Earth</p>
+        <p class="certificate-meta" id="certificate-id"></p>
+        <p class="certificate-meta" id="certificate-date"></p>
+        <p class="certificate-meta" id="certificate-message"></p>
+      </div>
+      <p class="message">“There are no foreigners here. There is only one home, and we share it.”</p>
+      <p class="intro">This is a personal, symbolic certificate of belonging, not a government-issued identity document.</p>
+      <div class="result-actions">
+        <button class="primary" id="download">Download certificate</button>
+        <button class="secondary" id="restart">Start again</button>
+      </div>
+    </section>
+    <section id="details" class="hidden" aria-live="polite">
+      <p class="eyebrow">Make it yours</p>
+      <h1>Your place<br>on Earth.</h1>
+      <p class="intro">Add your name and a message for yourself and the planet. These will appear on your certificate.</p>
+      <form class="details-card" id="details-form">
+        <label class="field"><span>Your name</span><input id="citizen-name" name="name" maxlength="80" autocomplete="name" required placeholder="Name to appear on certificate"></label>
+        <label class="field"><span>Your message to yourself and Earth</span><textarea id="citizen-message" name="message" maxlength="1000" required placeholder="A promise, a hope, or a few words... "></textarea></label>
+        <button class="primary" type="submit">Create my citizenship <span aria-hidden="true">→</span></button>
+      </form>
+    </section>
+    <section id="declined" class="denied hidden" aria-live="polite">
+      <p class="eyebrow">Not quite</p>
+      <h2>Citizenship not granted.</h2>
+      <p>All three answers need to be yes. You can always start again.</p>
+      <button class="primary" id="tryagain">Try again</button>
+    </section>
+  </main>
+  <footer><span>EARTH CITIZENSHIP PROJECT</span><span>Humanity has one home.</span></footer>
+</div>
+<script>
+const questions = ["Are you human?", "Are you on Earth?", "Do you love humans and Earth?"];
+let current = 0;
+const sections = ["welcome", "quiz", "details", "success", "declined"];
+let certificate = null;
+function show(id) { sections.forEach(name => document.getElementById(name).classList.toggle("hidden", name !== id)); }
+function updateQuestion() {
+  document.getElementById("step").textContent = `QUESTION 0${current + 1} / 03`;
+  document.getElementById("question").textContent = questions[current];
+  document.querySelectorAll(".progress span").forEach((bar, i) => bar.classList.toggle("active", i <= current));
+}
+function start() { current = 0; updateQuestion(); show("quiz"); }
+document.getElementById("begin").addEventListener("click", start);
+document.getElementById("yes").addEventListener("click", () => { current++; if (current === questions.length) show("details"); else updateQuestion(); });
+document.getElementById("no").addEventListener("click", () => show("declined"));
+document.getElementById("restart").addEventListener("click", () => show("welcome"));
+document.getElementById("tryagain").addEventListener("click", start);
+function makeId() {
+  const alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const bytes = new Uint8Array(26);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, byte => alphabet[byte % alphabet.length]).join("");
+}
+document.getElementById("details-form").addEventListener("submit", event => {
+  event.preventDefault();
+  const name = document.getElementById("citizen-name").value.trim();
+  const message = document.getElementById("citizen-message").value.trim();
+  if (!name || !message) return;
+  certificate = { id: makeId(), name, message, date: new Date().toISOString().slice(0, 10) };
+  document.getElementById("certificate-name").textContent = `Granted to ${name}`;
+  document.getElementById("certificate-id").textContent = `CITIZENSHIP ID: ${certificate.id}`;
+  document.getElementById("certificate-date").textContent = `DATE ISSUED: ${certificate.date}`;
+  document.getElementById("certificate-message").textContent = `“${message}”`;
+  show("success");
+});
+document.getElementById("download").addEventListener("click", () => {
+  if (!certificate) return;
+  const contents = [
+    "CITIZEN OF EARTH",
+    "CERTIFICATE OF BELONGING",
+    "",
+    `Name: ${certificate.name}`,
+    `Citizenship ID: ${certificate.id}`,
+    `Date issued: ${certificate.date}`,
+    "",
+    "Personal message:",
+    certificate.message,
+    "",
+    "DECLARATION",
+    "The holder affirms that they are human, are on Earth, and love humans and Earth.",
+    "",
+    "This is a personal, symbolic certificate. It is not a government-issued identity document, proof of legal nationality, or entry credential. The ID is randomly generated by this browser and is not registered in a central database."
+  ].join("\\n");
+  const blob = new Blob([contents], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `citizen-of-earth-${certificate.id}.txt`;
+  link.click();
+  URL.revokeObjectURL(url);
+});
+</script>
+</body>
+</html>
