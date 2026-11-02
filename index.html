@@ -183,15 +183,19 @@ document.getElementById("download").addEventListener("click", () => {
   if (!certificate) return;
   const contents = [
     "CITIZEN OF EARTH",
+    
     "CERTIFICATE OF BELONGING",
+    
     "",
     `Name: ${certificate.name}`,
     `Citizenship ID: ${certificate.id}`,
     `Date issued: ${certificate.date}`,
     "",
+    
     "Personal message:",
     certificate.message,
     "",
+    
     "DECLARATION",
     "The holder affirms that they are human, are on Earth, and love humans and Earth.",
     "",
