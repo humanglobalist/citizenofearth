@@ -29,7 +29,10 @@ body { margin: 0; background: var(--site-background); color: var(--site-on-backg
 header { width: min(100% - 48px, 900px); margin: 0 auto; padding: calc(25px * var(--site-spacing-scale)) 0; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
 .brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 650; letter-spacing: .02em; }
 .brand-mark { width: 28px; height: 28px; border: 1.5px solid var(--site-primary); border-radius: 50%; display: grid; place-items: center; color: var(--site-primary); font-size: 16px; }
+.header-right { display: flex; align-items: center; gap: 14px; }
 .header-note { font-size: 12px; color: var(--muted); }
+#lang { font: inherit; font-size: 12px; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: calc(6px * var(--site-radius-scale)); padding: 6px 8px; cursor: pointer; max-width: 150px; }
+#lang:focus-visible { outline: 3px solid #9bbeb0; outline-offset: 3px; }
 main { width: min(100% - 40px, 560px); margin: auto; padding: 68px 0 80px; flex: 1; }
 .eyebrow { color: var(--site-primary); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; font-weight: 700; margin: 0 0 18px; }
 h1 { font-family: var(--site-font-heading); font-size: calc( clamp(42px, 8vw, 68px) * var(--site-heading-scale)); line-height: 1.02; letter-spacing: -.045em; font-weight: 500; margin: 0; }
@@ -65,11 +68,13 @@ footer { width: min(100% - 48px, 900px); margin: 0 auto; padding: 18px 0 24px; b
 .denied h2 { font-family: var(--site-font-heading); font-weight: 500; font-size: 32px; }
 .denied p { color: var(--muted); line-height: 1.65; }
 .details-card { border: 1px solid var(--line); border-radius: calc(10px * var(--site-radius-scale)); padding: calc(28px * var(--site-spacing-scale)); background: light-dark(#ffffff, #171c19); }
-.field { display: block; text-align: left; margin: 0 0 20px; }
+.field { display: block; text-align: start; margin: 0 0 20px; }
 .field span { display: block; font-size: 12px; font-weight: 650; margin: 0 0 8px; }
 .field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: 6px; padding: 12px; font: inherit; color: var(--site-on-background); background: var(--site-background); }
 .field textarea { min-height: 110px; resize: vertical; }
 .certificate-meta { margin-top: 16px !important; overflow-wrap: anywhere; }
+[dir="rtl"] .arrow { display: inline-block; transform: scaleX(-1); }
+@media (max-width: 520px) { .header-note { display: none; } }
 @media (max-width: 480px) { header { width: calc(100% - 36px); } main { padding: 52px 0 64px; } footer { width: calc(100% - 36px); flex-direction: column; } .question-card { padding: 23px 19px; } }
 @media print { header, footer, .result-actions { display: none; } body, #app { background: white; } main { padding: 30px 0; } }
 </style>
@@ -77,25 +82,28 @@ footer { width: min(100% - 48px, 900px); margin: 0 auto; padding: 18px 0 24px; b
 <body>
 <div id="app">
   <header>
-    <div class="brand"><span class="brand-mark">◎</span><span>EARTH CITIZENSHIP</span></div>
-    <span class="header-note">One planet. One humanity.</span>
+    <div class="brand"><span class="brand-mark">◎</span><span data-i="b" data-up="1">EARTH CITIZENSHIP</span></div>
+    <div class="header-right">
+      <span class="header-note" data-i="n">One planet. One humanity.</span>
+      <select id="lang" aria-label="Language"></select>
+    </div>
   </header>
   <main>
     <section id="welcome">
-      <p class="eyebrow">A citizenship for everyone</p>
-      <h1>We all belong<br>here.</h1>
-      <p class="intro">No borders. No passports. No complicated requirements. Just three questions.</p>
-      <button class="primary" id="begin">Begin <span aria-hidden="true">→</span></button>
+      <p class="eyebrow" data-i="e1">A citizenship for everyone</p>
+      <h1 data-i="h1" data-html="1">We all belong<br>here.</h1>
+      <p class="intro" data-i="i1">No borders. No passports. No complicated requirements. Just three questions.</p>
+      <button class="primary" id="begin"><span data-i="bg">Begin</span> <span class="arrow" aria-hidden="true">→</span></button>
     </section>
     <section id="quiz" class="hidden" aria-live="polite">
-      <p class="eyebrow">A simple declaration</p>
+      <p class="eyebrow" data-i="e2">A simple declaration</p>
       <div class="progress" aria-label="Question progress"><span></span><span></span><span></span></div>
       <div class="question-card">
         <p class="step-label" id="step">QUESTION 01 / 03</p>
         <h2 class="question" id="question">Are you human?</h2>
         <div class="actions">
-          <button class="primary" id="yes">Yes</button>
-          <button class="secondary" id="no">No</button>
+          <button class="primary" id="yes" data-i="y">Yes</button>
+          <button class="secondary" id="no" data-i="no">No</button>
         </div>
       </div>
     </section>
@@ -107,57 +115,463 @@ footer { width: min(100% - 48px, 900px); margin: 0 auto; padding: 18px 0 24px; b
           <path d="M36 31l8-5 7 4 1 8-7 5-2 9-8-2-4-8 5-11ZM59 54l10-4 8 7-3 10-9 6-8-8 2-11Z" fill="currentColor" opacity=".18"/>
         </svg>
       </div>
-      <p class="eyebrow">Welcome, citizen</p>
-      <h1>You belong<br>to Earth.</h1>
-      <p class="intro">Your answers are all we need.</p>
+      <p class="eyebrow" data-i="e4">Welcome, citizen</p>
+      <h1 data-i="h4" data-html="1">You belong<br>to Earth.</h1>
+      <p class="intro" data-i="i4">Your answers are all we need.</p>
       <div class="certificate">
-        <span class="certificate-label">Certificate of belonging</span>
-        <strong>Citizen of Earth</strong>
+        <span class="certificate-label" data-i="cl">Certificate of belonging</span>
+        <strong data-i="ct">Citizen of Earth</strong>
         <p id="certificate-name">Granted to a human being<br>of planet Earth</p>
         <p class="certificate-meta" id="certificate-id"></p>
         <p class="certificate-meta" id="certificate-date"></p>
         <p class="certificate-meta" id="certificate-message"></p>
       </div>
-      <p class="message">“There are no foreigners here. There is only one home, and we share it.”</p>
-      <p class="intro">This is a personal, symbolic certificate of belonging, not a government-issued identity document.</p>
+      <p class="message" data-i="mq">“There are no foreigners here. There is only one home, and we share it.”</p>
+      <p class="intro" data-i="ds">This is a personal, symbolic certificate of belonging, not a government-issued identity document.</p>
       <div class="result-actions">
-        <button class="primary" id="download">Download certificate</button>
-        <button class="secondary" id="restart">Start again</button>
+        <button class="primary" id="download" data-i="dl">Download certificate</button>
+        <button class="secondary" id="restart" data-i="rs">Start again</button>
       </div>
     </section>
     <section id="details" class="hidden" aria-live="polite">
-      <p class="eyebrow">Make it yours</p>
-      <h1>Your place<br>on Earth.</h1>
-      <p class="intro">Add your name and a message for yourself and the planet. These will appear on your certificate.</p>
+      <p class="eyebrow" data-i="e3">Make it yours</p>
+      <h1 data-i="h3" data-html="1">Your place<br>on Earth.</h1>
+      <p class="intro" data-i="i3">Add your name and a message for yourself and the planet. These will appear on your certificate.</p>
       <form class="details-card" id="details-form">
-        <label class="field"><span>Your name</span><input id="citizen-name" name="name" maxlength="80" autocomplete="name" required placeholder="Name to appear on certificate"></label>
-        <label class="field"><span>Your message to yourself and Earth</span><textarea id="citizen-message" name="message" maxlength="1000" required placeholder="A promise, a hope, or a few words... "></textarea></label>
-        <button class="primary" type="submit">Create my citizenship <span aria-hidden="true">→</span></button>
+        <label class="field"><span data-i="ln">Your name</span><input id="citizen-name" name="name" maxlength="80" autocomplete="name" required data-ph="pn" placeholder="Name to appear on certificate"></label>
+        <label class="field"><span data-i="lm">Your message to yourself and Earth</span><textarea id="citizen-message" name="message" maxlength="1000" required data-ph="pm" placeholder="A promise, a hope, or a few words... "></textarea></label>
+        <button class="primary" type="submit"><span data-i="sb">Create my citizenship</span> <span class="arrow" aria-hidden="true">→</span></button>
       </form>
     </section>
     <section id="declined" class="denied hidden" aria-live="polite">
-      <p class="eyebrow">Not quite</p>
-      <h2>Citizenship not granted.</h2>
-      <p>All three answers need to be yes. You can always start again.</p>
-      <button class="primary" id="tryagain">Try again</button>
+      <p class="eyebrow" data-i="e5">Not quite</p>
+      <h2 data-i="h5">Citizenship not granted.</h2>
+      <p data-i="p5">All three answers need to be yes. You can always start again.</p>
+      <button class="primary" id="tryagain" data-i="ta">Try again</button>
     </section>
   </main>
-  <footer><span>EARTH CITIZENSHIP PROJECT</span><span>Humanity has one home.</span></footer>
+  <footer><span data-i="f1" data-up="1">EARTH CITIZENSHIP PROJECT</span><span data-i="f2">Humanity has one home.</span></footer>
 </div>
 <script>
-const questions = ["Are you human?", "Are you on Earth?", "Do you love humans and Earth?"];
-let current = 0;
+/*
+  TRANSLATIONS
+  Keys: b brand · n header note · e1/h1/i1/bg welcome · e2/ql/q quiz · y/no answers
+  e3/h3/i3/ln/lm/pn/pm/sb details form · e4/h4/i4 success · cl/ct/gd/gt/idl/dtl certificate
+  mq quote · ds disclaimer · dl/rs buttons · e5/h5/p5/ta declined · f1/f2 footer
+  nm/mm/dc/dt/fd/qi/qs/ca/cq = text of the downloaded certificate file
+  To add a language: copy the "en" block, translate it, and add it to this object.
+*/
+const I18N = {
+  en: { name: "English",
+    b: "Earth Citizenship", n: "One planet. One humanity.",
+    e1: "A citizenship for everyone", h1: "We all belong<br>here.", i1: "No borders. No passports. No complicated requirements. Just three questions.", bg: "Begin",
+    e2: "A simple declaration", ql: "Question", q: ["Are you human?", "Are you on Earth?", "Do you love humans and Earth?"], y: "Yes", no: "No",
+    e3: "Make it yours", h3: "Your place<br>on Earth.", i3: "Add your name and a message for yourself and the planet. These will appear on your certificate.", ln: "Your name", lm: "Your message to yourself and Earth", pn: "Name to appear on certificate", pm: "A promise, a hope, or a few words...", sb: "Create my citizenship",
+    e4: "Welcome, citizen", h4: "You belong<br>to Earth.", i4: "Your answers are all we need.", cl: "Certificate of belonging", ct: "Citizen of Earth", gd: "Granted to a human being<br>of planet Earth", gt: "Granted to {name}", idl: "Citizenship ID", dtl: "Date issued",
+    mq: "“There are no foreigners here. There is only one home, and we share it.”", ds: "This is a personal, symbolic certificate of belonging, not a government-issued identity document.", dl: "Download certificate", rs: "Start again",
+    e5: "Not quite", h5: "Citizenship not granted.", p5: "All three answers need to be yes. You can always start again.", ta: "Try again",
+    f1: "Earth Citizenship Project", f2: "Humanity has one home.",
+    nm: "Name", mm: "Personal message", dc: "Declaration", dt: "The holder affirms that they are human, are on Earth, and love humans and Earth.",
+    fd: "This is a personal, symbolic certificate. It is not a government-issued identity document, proof of legal nationality, or entry credential. The ID is randomly generated by this browser and is not registered in a central database.",
+    qi: "Here are some famous quotes by humans that were made on Earth",
+    qs: ["That's one small step for a man, one giant leap for mankind.", "Look deep into nature, and then you will understand everything better.", "I have a dream.", "The unexamined life is not worth living.", "Be yourself; everyone else is already taken."],
+    ca: "me! the creator of the project", cq: "We are simply evolutionary outputs, the best outputs, living in a world run by instincts." },
+
+  zh: { name: "中文（简体）",
+    b: "地球公民", n: "一个星球，一个人类。",
+    e1: "人人皆可成为公民", h1: "我们都属于<br>这里。", i1: "没有国界，没有护照，没有繁琐的要求。只需三个问题。", bg: "开始",
+    e2: "一份简单的宣言", ql: "问题", q: ["你是人类吗？", "你在地球上吗？", "你热爱人类和地球吗？"], y: "是", no: "否",
+    e3: "让它属于你", h3: "你在地球上的<br>位置。", i3: "添加你的姓名，以及写给自己和地球的一段话。它们将出现在你的证书上。", ln: "你的姓名", lm: "写给自己和地球的话", pn: "将显示在证书上的姓名", pm: "一个承诺、一份希望，或几句话……", sb: "创建我的公民身份",
+    e4: "欢迎你，公民", h4: "你属于<br>地球。", i4: "你的回答就是我们所需要的一切。", cl: "归属证书", ct: "地球公民", gd: "授予一位来自地球的<br>人类", gt: "授予 {name}", idl: "公民编号", dtl: "签发日期",
+    mq: "“这里没有外人。只有一个家，我们共同拥有它。”", ds: "这是一份个人的、象征性的归属证书，不是政府签发的身份证件。", dl: "下载证书", rs: "重新开始",
+    e5: "还差一点", h5: "未获得公民身份。", p5: "三个回答都必须是“是”。你可以随时重新开始。", ta: "再试一次",
+    f1: "地球公民项目", f2: "人类只有一个家。",
+    nm: "姓名", mm: "个人寄语", dc: "宣言", dt: "持有人声明：我是人类，我在地球上，我热爱人类和地球。",
+    fd: "这是一份个人的象征性证书，不是政府签发的身份证件，不是法定国籍证明，也不是入境凭证。编号由此浏览器随机生成，未在任何中央数据库中登记。",
+    qi: "以下是人类在地球上说过的一些名言",
+    qs: ["这是个人的一小步，却是人类的一大步。", "深入观察自然，你就会更好地理解一切。", "我有一个梦想。", "未经审视的人生不值得过。", "做你自己；别人都已经有人做了。"],
+    ca: "我！本项目的创作者", cq: "我们只是进化的产物，是最好的产物，生活在一个由本能支配的世界里。" },
+
+  hi: { name: "हिन्दी",
+    b: "पृथ्वी नागरिकता", n: "एक ग्रह। एक मानवता।",
+    e1: "सबके लिए एक नागरिकता", h1: "हम सब यहीं<br>के हैं।", i1: "कोई सीमा नहीं। कोई पासपोर्ट नहीं। कोई जटिल शर्तें नहीं। बस तीन सवाल।", bg: "शुरू करें",
+    e2: "एक सरल घोषणा", ql: "प्रश्न", q: ["क्या आप इंसान हैं?", "क्या आप पृथ्वी पर हैं?", "क्या आप इंसानों और पृथ्वी से प्रेम करते हैं?"], y: "हाँ", no: "नहीं",
+    e3: "इसे अपना बनाएँ", h3: "पृथ्वी पर<br>आपकी जगह।", i3: "अपना नाम और अपने तथा पृथ्वी के लिए एक संदेश जोड़ें। ये आपके प्रमाणपत्र पर दिखाई देंगे।", ln: "आपका नाम", lm: "अपने और पृथ्वी के लिए आपका संदेश", pn: "प्रमाणपत्र पर दिखने वाला नाम", pm: "एक वादा, एक उम्मीद, या कुछ शब्द...", sb: "मेरी नागरिकता बनाएँ",
+    e4: "स्वागत है, नागरिक", h4: "आप पृथ्वी के<br>हैं।", i4: "हमें बस आपके उत्तर चाहिए थे।", cl: "अपनेपन का प्रमाणपत्र", ct: "पृथ्वी का नागरिक", gd: "पृथ्वी ग्रह के एक<br>मानव को प्रदान किया गया", gt: "{name} को प्रदान किया गया", idl: "नागरिकता आईडी", dtl: "जारी करने की तिथि",
+    mq: "“यहाँ कोई विदेशी नहीं है। घर एक ही है, और हम उसे साझा करते हैं।”", ds: "यह अपनेपन का एक व्यक्तिगत, प्रतीकात्मक प्रमाणपत्र है, सरकार द्वारा जारी पहचान दस्तावेज़ नहीं।", dl: "प्रमाणपत्र डाउनलोड करें", rs: "फिर से शुरू करें",
+    e5: "लगभग", h5: "नागरिकता नहीं दी गई।", p5: "तीनों उत्तर “हाँ” होने चाहिए। आप कभी भी दोबारा शुरू कर सकते हैं।", ta: "फिर कोशिश करें",
+    f1: "पृथ्वी नागरिकता परियोजना", f2: "मानवता का एक ही घर है।",
+    nm: "नाम", mm: "व्यक्तिगत संदेश", dc: "घोषणा", dt: "धारक पुष्टि करता है कि वह इंसान है, पृथ्वी पर है, और इंसानों तथा पृथ्वी से प्रेम करता है।",
+    fd: "यह एक व्यक्तिगत, प्रतीकात्मक प्रमाणपत्र है। यह सरकार द्वारा जारी पहचान दस्तावेज़, कानूनी राष्ट्रीयता का प्रमाण या प्रवेश-पत्र नहीं है। आईडी इस ब्राउज़र द्वारा यादृच्छिक रूप से बनाई गई है और किसी केंद्रीय डेटाबेस में दर्ज नहीं है।",
+    qi: "पृथ्वी पर इंसानों द्वारा कहे गए कुछ प्रसिद्ध विचार",
+    qs: ["यह एक आदमी के लिए छोटा-सा कदम है, पर मानवता के लिए एक विशाल छलांग।", "प्रकृति को गहराई से देखो, तब तुम हर चीज़ को बेहतर समझोगे।", "मेरा एक सपना है।", "बिना परखा हुआ जीवन जीने लायक नहीं है।", "स्वयं बनो; बाकी सब पहले से ही लिए जा चुके हैं।"],
+    ca: "मैं! इस परियोजना का रचयिता", cq: "हम बस विकास की उपज हैं, सर्वश्रेष्ठ उपज, जो प्रवृत्तियों से चलने वाली दुनिया में रहती है।" },
+
+  es: { name: "Español",
+    b: "Ciudadanía de la Tierra", n: "Un planeta. Una humanidad.",
+    e1: "Una ciudadanía para todos", h1: "Todos pertenecemos<br>aquí.", i1: "Sin fronteras. Sin pasaportes. Sin requisitos complicados. Solo tres preguntas.", bg: "Comenzar",
+    e2: "Una declaración sencilla", ql: "Pregunta", q: ["¿Eres humano?", "¿Estás en la Tierra?", "¿Amas a los seres humanos y a la Tierra?"], y: "Sí", no: "No",
+    e3: "Hazlo tuyo", h3: "Tu lugar<br>en la Tierra.", i3: "Añade tu nombre y un mensaje para ti y para la Tierra. Aparecerán en tu certificado.", ln: "Tu nombre", lm: "Tu mensaje para ti y para la Tierra", pn: "Nombre que aparecerá en el certificado", pm: "Una promesa, una esperanza o unas pocas palabras...", sb: "Crear mi ciudadanía",
+    e4: "Bienvenido, ciudadano", h4: "Perteneces<br>a la Tierra.", i4: "Tus respuestas son todo lo que necesitamos.", cl: "Certificado de pertenencia", ct: "Ciudadano de la Tierra", gd: "Otorgado a un ser humano<br>del planeta Tierra", gt: "Otorgado a {name}", idl: "ID de ciudadanía", dtl: "Fecha de emisión",
+    mq: "“Aquí no hay extranjeros. Solo hay un hogar, y lo compartimos.”", ds: "Este es un certificado de pertenencia personal y simbólico, no un documento de identidad emitido por ningún gobierno.", dl: "Descargar certificado", rs: "Empezar de nuevo",
+    e5: "Casi", h5: "Ciudadanía no otorgada.", p5: "Las tres respuestas deben ser sí. Siempre puedes volver a empezar.", ta: "Intentar de nuevo",
+    f1: "Proyecto Ciudadanía de la Tierra", f2: "La humanidad tiene un solo hogar.",
+    nm: "Nombre", mm: "Mensaje personal", dc: "Declaración", dt: "El titular afirma que es humano, que está en la Tierra y que ama a los seres humanos y a la Tierra.",
+    fd: "Este es un certificado personal y simbólico. No es un documento de identidad emitido por un gobierno, ni prueba de nacionalidad legal, ni credencial de entrada. El ID es generado al azar por este navegador y no está registrado en ninguna base de datos central.",
+    qi: "Aquí tienes algunas frases famosas dichas por humanos en la Tierra",
+    qs: ["Este es un pequeño paso para un hombre, un gran salto para la humanidad.", "Mira profundamente en la naturaleza y entonces comprenderás todo mejor.", "Tengo un sueño.", "Una vida sin examen no merece ser vivida.", "Sé tú mismo; los demás ya están ocupados."],
+    ca: "¡yo! el creador del proyecto", cq: "Simplemente somos productos de la evolución, los mejores productos, que viven en un mundo gobernado por los instintos." },
+
+  ar: { name: "العربية", rtl: true,
+    b: "مواطنة الأرض", n: "كوكب واحد. إنسانية واحدة.",
+    e1: "مواطنة للجميع", h1: "كلنا ننتمي<br>إلى هنا.", i1: "لا حدود. لا جوازات سفر. لا شروط معقدة. ثلاثة أسئلة فقط.", bg: "ابدأ",
+    e2: "إعلان بسيط", ql: "السؤال", q: ["هل أنت إنسان؟", "هل أنت على كوكب الأرض؟", "هل تحب البشر والأرض؟"], y: "نعم", no: "لا",
+    e3: "اجعلها لك", h3: "مكانك<br>على الأرض.", i3: "أضف اسمك ورسالة لنفسك وللأرض. ستظهر على شهادتك.", ln: "اسمك", lm: "رسالتك إلى نفسك وإلى الأرض", pn: "الاسم الذي سيظهر على الشهادة", pm: "وعد، أو أمل، أو بضع كلمات...", sb: "أنشئ مواطنتي",
+    e4: "مرحبًا بك أيها المواطن", h4: "أنت تنتمي<br>إلى الأرض.", i4: "إجاباتك هي كل ما نحتاج إليه.", cl: "شهادة انتماء", ct: "مواطن الأرض", gd: "تُمنح لإنسان<br>من كوكب الأرض", gt: "تُمنح إلى {name}", idl: "رقم المواطنة", dtl: "تاريخ الإصدار",
+    mq: "“لا غرباء هنا. هناك بيت واحد فقط، ونحن نتشاركه.”", ds: "هذه شهادة انتماء شخصية ورمزية، وليست وثيقة هوية صادرة عن أي حكومة.", dl: "تنزيل الشهادة", rs: "البدء من جديد",
+    e5: "ليس تمامًا", h5: "لم تُمنح المواطنة.", p5: "يجب أن تكون الإجابات الثلاث كلها «نعم». يمكنك دائمًا البدء من جديد.", ta: "حاول مرة أخرى",
+    f1: "مشروع مواطنة الأرض", f2: "للإنسانية بيت واحد.",
+    nm: "الاسم", mm: "الرسالة الشخصية", dc: "الإعلان", dt: "يؤكد حامل هذه الشهادة أنه إنسان، وأنه على كوكب الأرض، وأنه يحب البشر والأرض.",
+    fd: "هذه شهادة شخصية ورمزية. وهي ليست وثيقة هوية حكومية، ولا إثباتًا للجنسية القانونية، ولا تصريح دخول. الرقم مُولَّد عشوائيًا بواسطة هذا المتصفح وغير مسجَّل في أي قاعدة بيانات مركزية.",
+    qi: "إليك بعض الأقوال المشهورة لبشر عاشوا على الأرض",
+    qs: ["هذه خطوة صغيرة لإنسان، لكنها قفزة عملاقة للبشرية.", "تأمّل الطبيعة بعمق، وعندها ستفهم كل شيء بصورة أفضل.", "لدي حلم.", "الحياة التي لا تُفحَص لا تستحق أن تُعاش.", "كن نفسك؛ فالآخرون محجوزون بالفعل."],
+    ca: "أنا! مبتكر المشروع", cq: "نحن ببساطة نتاج التطور، أفضل نتاج، نعيش في عالم تحكمه الغرائز." },
+
+  fr: { name: "Français",
+    b: "Citoyenneté terrienne", n: "Une planète. Une humanité.",
+    e1: "Une citoyenneté pour tous", h1: "Nous avons tous<br>notre place ici.", i1: "Pas de frontières. Pas de passeports. Pas d'exigences compliquées. Juste trois questions.", bg: "Commencer",
+    e2: "Une déclaration simple", ql: "Question", q: ["Êtes-vous humain ?", "Êtes-vous sur Terre ?", "Aimez-vous les humains et la Terre ?"], y: "Oui", no: "Non",
+    e3: "Faites-la vôtre", h3: "Votre place<br>sur Terre.", i3: "Ajoutez votre nom et un message pour vous-même et pour la Terre. Ils apparaîtront sur votre certificat.", ln: "Votre nom", lm: "Votre message à vous-même et à la Terre", pn: "Nom à afficher sur le certificat", pm: "Une promesse, un espoir ou quelques mots...", sb: "Créer ma citoyenneté",
+    e4: "Bienvenue, citoyen", h4: "Vous appartenez<br>à la Terre.", i4: "Vos réponses sont tout ce dont nous avons besoin.", cl: "Certificat d'appartenance", ct: "Citoyen de la Terre", gd: "Décerné à un être humain<br>de la planète Terre", gt: "Décerné à {name}", idl: "ID de citoyenneté", dtl: "Date d'émission",
+    mq: "« Il n'y a pas d'étrangers ici. Il n'y a qu'un seul foyer, et nous le partageons. »", ds: "Ceci est un certificat d'appartenance personnel et symbolique, et non un document d'identité délivré par un gouvernement.", dl: "Télécharger le certificat", rs: "Recommencer",
+    e5: "Pas tout à fait", h5: "Citoyenneté non accordée.", p5: "Les trois réponses doivent être oui. Vous pouvez toujours recommencer.", ta: "Réessayer",
+    f1: "Projet Citoyenneté terrienne", f2: "L'humanité n'a qu'un seul foyer.",
+    nm: "Nom", mm: "Message personnel", dc: "Déclaration", dt: "Le titulaire affirme être humain, être sur Terre et aimer les humains et la Terre.",
+    fd: "Ceci est un certificat personnel et symbolique. Ce n'est ni un document d'identité délivré par un gouvernement, ni une preuve de nationalité légale, ni un titre d'entrée. L'ID est généré aléatoirement par ce navigateur et n'est enregistré dans aucune base de données centrale.",
+    qi: "Voici quelques citations célèbres prononcées par des humains sur Terre",
+    qs: ["C'est un petit pas pour l'homme, un bond de géant pour l'humanité.", "Regardez profondément la nature, et vous comprendrez mieux toute chose.", "Je fais un rêve.", "Une vie sans examen ne vaut pas la peine d'être vécue.", "Soyez vous-même ; les autres sont déjà pris."],
+    ca: "moi ! le créateur du projet", cq: "Nous ne sommes que des produits de l'évolution, les meilleurs produits, vivant dans un monde régi par l'instinct." },
+
+  bn: { name: "বাংলা",
+    b: "পৃথিবীর নাগরিকত্ব", n: "একটি গ্রহ। একটি মানবতা।",
+    e1: "সবার জন্য একটি নাগরিকত্ব", h1: "আমরা সবাই<br>এখানকারই।", i1: "কোনো সীমান্ত নেই। কোনো পাসপোর্ট নেই। কোনো জটিল শর্ত নেই। শুধু তিনটি প্রশ্ন।", bg: "শুরু করুন",
+    e2: "একটি সহজ ঘোষণা", ql: "প্রশ্ন", q: ["আপনি কি মানুষ?", "আপনি কি পৃথিবীতে আছেন?", "আপনি কি মানুষ ও পৃথিবীকে ভালোবাসেন?"], y: "হ্যাঁ", no: "না",
+    e3: "নিজের করে নিন", h3: "পৃথিবীতে<br>আপনার জায়গা।", i3: "আপনার নাম এবং নিজের ও পৃথিবীর জন্য একটি বার্তা যোগ করুন। এগুলো আপনার সনদে দেখা যাবে।", ln: "আপনার নাম", lm: "নিজের ও পৃথিবীর প্রতি আপনার বার্তা", pn: "সনদে যে নাম দেখানো হবে", pm: "একটি প্রতিজ্ঞা, একটি আশা, অথবা কয়েকটি কথা...", sb: "আমার নাগরিকত্ব তৈরি করুন",
+    e4: "স্বাগতম, নাগরিক", h4: "আপনি পৃথিবীর<br>আপন।", i4: "আপনার উত্তরগুলোই আমাদের দরকার ছিল।", cl: "আপন হওয়ার সনদ", ct: "পৃথিবীর নাগরিক", gd: "পৃথিবী গ্রহের একজন<br>মানুষকে প্রদান করা হলো", gt: "{name}-কে প্রদান করা হলো", idl: "নাগরিকত্ব আইডি", dtl: "ইস্যুর তারিখ",
+    mq: "“এখানে কেউ বিদেশি নয়। ঘর একটাই, আর আমরা সবাই তা ভাগ করে নিই।”", ds: "এটি একটি ব্যক্তিগত, প্রতীকী সনদ; কোনো সরকার-প্রদত্ত পরিচয়পত্র নয়।", dl: "সনদ ডাউনলোড করুন", rs: "আবার শুরু করুন",
+    e5: "প্রায় হয়েছে", h5: "নাগরিকত্ব দেওয়া হয়নি।", p5: "তিনটি উত্তরই “হ্যাঁ” হতে হবে। আপনি যেকোনো সময় আবার শুরু করতে পারেন।", ta: "আবার চেষ্টা করুন",
+    f1: "পৃথিবীর নাগরিকত্ব প্রকল্প", f2: "মানবতার ঘর একটাই।",
+    nm: "নাম", mm: "ব্যক্তিগত বার্তা", dc: "ঘোষণা", dt: "ধারক ঘোষণা করছেন যে তিনি মানুষ, তিনি পৃথিবীতে আছেন, এবং তিনি মানুষ ও পৃথিবীকে ভালোবাসেন।",
+    fd: "এটি একটি ব্যক্তিগত ও প্রতীকী সনদ। এটি সরকার-প্রদত্ত পরিচয়পত্র, আইনি জাতীয়তার প্রমাণ বা প্রবেশপত্র নয়। আইডিটি এই ব্রাউজার দ্বারা এলোমেলোভাবে তৈরি এবং কোনো কেন্দ্রীয় ডাটাবেসে নিবন্ধিত নয়।",
+    qi: "পৃথিবীতে মানুষের বলা কয়েকটি বিখ্যাত উক্তি",
+    qs: ["এটি একজন মানুষের জন্য ছোট্ট একটি পদক্ষেপ, কিন্তু মানবজাতির জন্য এক বিশাল লাফ।", "প্রকৃতির গভীরে তাকাও, তাহলে সবকিছু আরও ভালো বুঝতে পারবে।", "আমার একটি স্বপ্ন আছে।", "যে জীবন যাচাই করা হয়নি, তা বেঁচে থাকার যোগ্য নয়।", "নিজে হও; অন্য সবাই ইতিমধ্যেই নেওয়া হয়ে গেছে।"],
+    ca: "আমি! এই প্রকল্পের স্রষ্টা", cq: "আমরা কেবল বিবর্তনের ফসল, সেরা ফসল, প্রবৃত্তি দ্বারা চালিত এক জগতে বাস করছি।" },
+
+  pt: { name: "Português",
+    b: "Cidadania da Terra", n: "Um planeta. Uma humanidade.",
+    e1: "Uma cidadania para todos", h1: "Todos nós pertencemos<br>a este lugar.", i1: "Sem fronteiras. Sem passaportes. Sem exigências complicadas. Apenas três perguntas.", bg: "Começar",
+    e2: "Uma declaração simples", ql: "Pergunta", q: ["Você é humano?", "Você está na Terra?", "Você ama os humanos e a Terra?"], y: "Sim", no: "Não",
+    e3: "Faça sua", h3: "Seu lugar<br>na Terra.", i3: "Adicione seu nome e uma mensagem para você e para a Terra. Eles aparecerão no seu certificado.", ln: "Seu nome", lm: "Sua mensagem para você e para a Terra", pn: "Nome que aparecerá no certificado", pm: "Uma promessa, uma esperança ou algumas palavras...", sb: "Criar minha cidadania",
+    e4: "Bem-vindo, cidadão", h4: "Você pertence<br>à Terra.", i4: "Suas respostas são tudo de que precisamos.", cl: "Certificado de pertencimento", ct: "Cidadão da Terra", gd: "Concedido a um ser humano<br>do planeta Terra", gt: "Concedido a {name}", idl: "ID de cidadania", dtl: "Data de emissão",
+    mq: "“Não há estrangeiros aqui. Há apenas um lar, e nós o compartilhamos.”", ds: "Este é um certificado de pertencimento pessoal e simbólico, não um documento de identidade emitido por um governo.", dl: "Baixar certificado", rs: "Começar de novo",
+    e5: "Quase", h5: "Cidadania não concedida.", p5: "As três respostas precisam ser sim. Você pode sempre recomeçar.", ta: "Tentar novamente",
+    f1: "Projeto Cidadania da Terra", f2: "A humanidade tem um só lar.",
+    nm: "Nome", mm: "Mensagem pessoal", dc: "Declaração", dt: "O titular afirma que é humano, que está na Terra e que ama os humanos e a Terra.",
+    fd: "Este é um certificado pessoal e simbólico. Não é um documento de identidade emitido por um governo, nem prova de nacionalidade legal, nem credencial de entrada. O ID é gerado aleatoriamente por este navegador e não é registrado em nenhum banco de dados central.",
+    qi: "Aqui estão algumas frases famosas ditas por humanos na Terra",
+    qs: ["Este é um pequeno passo para um homem, um salto gigantesco para a humanidade.", "Olhe profundamente para a natureza e então você compreenderá tudo melhor.", "Eu tenho um sonho.", "A vida não examinada não vale a pena ser vivida.", "Seja você mesmo; todos os outros já estão ocupados."],
+    ca: "eu! o criador do projeto", cq: "Somos simplesmente produtos da evolução, os melhores produtos, vivendo em um mundo governado pelos instintos." },
+
+  ru: { name: "Русский",
+    b: "Гражданство Земли", n: "Одна планета. Одно человечество.",
+    e1: "Гражданство для каждого", h1: "Мы все<br>здесь дома.", i1: "Никаких границ. Никаких паспортов. Никаких сложных требований. Всего три вопроса.", bg: "Начать",
+    e2: "Простая декларация", ql: "Вопрос", q: ["Вы человек?", "Вы находитесь на Земле?", "Вы любите людей и Землю?"], y: "Да", no: "Нет",
+    e3: "Сделайте его своим", h3: "Ваше место<br>на Земле.", i3: "Добавьте своё имя и послание себе и Земле. Они появятся в вашем сертификате.", ln: "Ваше имя", lm: "Ваше послание себе и Земле", pn: "Имя для сертификата", pm: "Обещание, надежда или несколько слов...", sb: "Создать моё гражданство",
+    e4: "Добро пожаловать, гражданин", h4: "Вы принадлежите<br>Земле.", i4: "Нам достаточно ваших ответов.", cl: "Сертификат принадлежности", ct: "Гражданин Земли", gd: "Выдан человеку<br>с планеты Земля", gt: "Выдан: {name}", idl: "ID гражданства", dtl: "Дата выдачи",
+    mq: "«Здесь нет чужих. Есть только один дом, и мы делим его на всех.»", ds: "Это личный символический сертификат принадлежности, а не удостоверение личности, выданное государством.", dl: "Скачать сертификат", rs: "Начать заново",
+    e5: "Почти", h5: "В гражданстве отказано.", p5: "Все три ответа должны быть «да». Вы всегда можете начать заново.", ta: "Попробовать снова",
+    f1: "Проект «Гражданство Земли»", f2: "У человечества один дом.",
+    nm: "Имя", mm: "Личное послание", dc: "Декларация", dt: "Владелец подтверждает, что он человек, что он находится на Земле и что он любит людей и Землю.",
+    fd: "Это личный символический сертификат. Он не является удостоверением личности, выданным государством, подтверждением законного гражданства или разрешением на въезд. ID генерируется случайным образом в этом браузере и не регистрируется ни в какой центральной базе данных.",
+    qi: "Несколько известных высказываний людей, сказанных на Земле",
+    qs: ["Это маленький шаг для человека, но огромный скачок для человечества.", "Взгляни глубоко в природу, и ты лучше поймёшь всё.", "У меня есть мечта.", "Неисследованная жизнь не стоит того, чтобы жить.", "Будь собой; все остальные роли уже заняты."],
+    ca: "я! создатель проекта", cq: "Мы всего лишь продукты эволюции, лучшие из них, живущие в мире, которым правят инстинкты." },
+
+  ur: { name: "اردو", rtl: true,
+    b: "زمین کی شہریت", n: "ایک سیارہ۔ ایک انسانیت۔",
+    e1: "سب کے لیے ایک شہریت", h1: "ہم سب کا<br>یہی گھر ہے۔", i1: "نہ کوئی سرحد، نہ پاسپورٹ، نہ کوئی پیچیدہ شرط۔ بس تین سوال۔", bg: "شروع کریں",
+    e2: "ایک سادہ اعلان", ql: "سوال", q: ["کیا آپ انسان ہیں؟", "کیا آپ زمین پر ہیں؟", "کیا آپ انسانوں اور زمین سے محبت کرتے ہیں؟"], y: "جی ہاں", no: "نہیں",
+    e3: "اسے اپنا بنائیں", h3: "زمین پر<br>آپ کی جگہ۔", i3: "اپنا نام اور اپنے اور زمین کے لیے ایک پیغام شامل کریں۔ یہ آپ کے سرٹیفکیٹ پر نظر آئیں گے۔", ln: "آپ کا نام", lm: "اپنے اور زمین کے لیے آپ کا پیغام", pn: "سرٹیفکیٹ پر ظاہر ہونے والا نام", pm: "ایک وعدہ، ایک امید، یا چند الفاظ...", sb: "میری شہریت بنائیں",
+    e4: "خوش آمدید، شہری", h4: "آپ کا تعلق<br>زمین سے ہے۔", i4: "ہمیں صرف آپ کے جوابات درکار تھے۔", cl: "تعلق کا سرٹیفکیٹ", ct: "زمین کا شہری", gd: "سیارۂ زمین کے ایک<br>انسان کو عطا کیا گیا", gt: "{name} کو عطا کیا گیا", idl: "شہریت آئی ڈی", dtl: "اجرا کی تاریخ",
+    mq: "“یہاں کوئی اجنبی نہیں۔ گھر ایک ہی ہے، اور ہم سب اس میں شریک ہیں۔”", ds: "یہ تعلق کا ایک ذاتی اور علامتی سرٹیفکیٹ ہے، کسی حکومت کا جاری کردہ شناختی دستاویز نہیں۔", dl: "سرٹیفکیٹ ڈاؤن لوڈ کریں", rs: "دوبارہ شروع کریں",
+    e5: "تھوڑی کسر رہ گئی", h5: "شہریت عطا نہیں کی گئی۔", p5: "تینوں جوابات “ہاں” ہونے چاہییں۔ آپ کسی بھی وقت دوبارہ شروع کر سکتے ہیں۔", ta: "دوبارہ کوشش کریں",
+    f1: "زمین کی شہریت کا منصوبہ", f2: "انسانیت کا ایک ہی گھر ہے۔",
+    nm: "نام", mm: "ذاتی پیغام", dc: "اعلان", dt: "حامل اس بات کی تصدیق کرتا ہے کہ وہ انسان ہے، زمین پر ہے، اور انسانوں اور زمین سے محبت کرتا ہے۔",
+    fd: "یہ ایک ذاتی اور علامتی سرٹیفکیٹ ہے۔ یہ حکومت کا جاری کردہ شناختی دستاویز، قانونی قومیت کا ثبوت یا داخلے کی سند نہیں ہے۔ آئی ڈی اس براؤزر نے بے ترتیب طریقے سے بنائی ہے اور کسی مرکزی ڈیٹا بیس میں درج نہیں۔",
+    qi: "زمین پر انسانوں کے کہے ہوئے کچھ مشہور اقوال",
+    qs: ["یہ ایک انسان کے لیے ایک چھوٹا سا قدم ہے، مگر انسانیت کے لیے ایک عظیم چھلانگ۔", "فطرت میں گہرائی سے دیکھو، پھر تم ہر چیز کو بہتر سمجھو گے۔", "میرا ایک خواب ہے۔", "جو زندگی پرکھی نہ جائے وہ جینے کے لائق نہیں۔", "خود بنو؛ باقی سب کے کردار پہلے ہی لیے جا چکے ہیں۔"],
+    ca: "میں! اس منصوبے کا خالق", cq: "ہم محض ارتقا کی پیداوار ہیں، بہترین پیداوار، جو جبلتوں کے زیرِ انتظام دنیا میں رہتی ہے۔" },
+
+  id: { name: "Bahasa Indonesia",
+    b: "Kewarganegaraan Bumi", n: "Satu planet. Satu umat manusia.",
+    e1: "Kewarganegaraan untuk semua orang", h1: "Kita semua<br>berasal dari sini.", i1: "Tanpa batas negara. Tanpa paspor. Tanpa syarat yang rumit. Hanya tiga pertanyaan.", bg: "Mulai",
+    e2: "Sebuah deklarasi sederhana", ql: "Pertanyaan", q: ["Apakah Anda manusia?", "Apakah Anda berada di Bumi?", "Apakah Anda mencintai manusia dan Bumi?"], y: "Ya", no: "Tidak",
+    e3: "Jadikan milik Anda", h3: "Tempat Anda<br>di Bumi.", i3: "Tambahkan nama Anda dan pesan untuk diri sendiri dan Bumi. Keduanya akan muncul di sertifikat Anda.", ln: "Nama Anda", lm: "Pesan Anda untuk diri sendiri dan Bumi", pn: "Nama yang akan tampil di sertifikat", pm: "Sebuah janji, harapan, atau beberapa kata...", sb: "Buat kewarganegaraan saya",
+    e4: "Selamat datang, warga", h4: "Anda milik<br>Bumi.", i4: "Jawaban Anda adalah semua yang kami butuhkan.", cl: "Sertifikat kepemilikan", ct: "Warga Bumi", gd: "Diberikan kepada seorang manusia<br>dari planet Bumi", gt: "Diberikan kepada {name}", idl: "ID Kewarganegaraan", dtl: "Tanggal diterbitkan",
+    mq: "“Tidak ada orang asing di sini. Hanya ada satu rumah, dan kita berbagi di dalamnya.”", ds: "Ini adalah sertifikat kepemilikan pribadi yang bersifat simbolis, bukan dokumen identitas yang diterbitkan pemerintah.", dl: "Unduh sertifikat", rs: "Mulai lagi",
+    e5: "Belum cukup", h5: "Kewarganegaraan tidak diberikan.", p5: "Ketiga jawaban harus ya. Anda selalu bisa memulai lagi.", ta: "Coba lagi",
+    f1: "Proyek Kewarganegaraan Bumi", f2: "Umat manusia memiliki satu rumah.",
+    nm: "Nama", mm: "Pesan pribadi", dc: "Deklarasi", dt: "Pemegang menyatakan bahwa ia adalah manusia, berada di Bumi, dan mencintai manusia serta Bumi.",
+    fd: "Ini adalah sertifikat pribadi yang bersifat simbolis. Ini bukan dokumen identitas yang diterbitkan pemerintah, bukan bukti kewarganegaraan hukum, dan bukan kredensial masuk. ID dibuat secara acak oleh peramban ini dan tidak didaftarkan di basis data pusat mana pun.",
+    qi: "Berikut beberapa kutipan terkenal dari manusia yang diucapkan di Bumi",
+    qs: ["Ini satu langkah kecil bagi seorang manusia, satu lompatan besar bagi umat manusia.", "Lihatlah alam dengan saksama, maka kamu akan memahami segalanya dengan lebih baik.", "Saya punya mimpi.", "Hidup yang tidak diperiksa tidak layak dijalani.", "Jadilah dirimu sendiri; yang lain sudah ada yang punya."],
+    ca: "saya! pencipta proyek ini", cq: "Kita hanyalah hasil evolusi, hasil terbaik, yang hidup di dunia yang dikendalikan oleh naluri." },
+
+  de: { name: "Deutsch",
+    b: "Erdbürgerschaft", n: "Ein Planet. Eine Menschheit.",
+    e1: "Eine Bürgerschaft für alle", h1: "Wir gehören alle<br>hierher.", i1: "Keine Grenzen. Keine Pässe. Keine komplizierten Voraussetzungen. Nur drei Fragen.", bg: "Beginnen",
+    e2: "Eine einfache Erklärung", ql: "Frage", q: ["Bist du ein Mensch?", "Bist du auf der Erde?", "Liebst du die Menschen und die Erde?"], y: "Ja", no: "Nein",
+    e3: "Mach sie zu deiner", h3: "Dein Platz<br>auf der Erde.", i3: "Füge deinen Namen und eine Botschaft an dich selbst und die Erde hinzu. Beides erscheint auf deiner Urkunde.", ln: "Dein Name", lm: "Deine Botschaft an dich selbst und die Erde", pn: "Name, der auf der Urkunde erscheint", pm: "Ein Versprechen, eine Hoffnung oder ein paar Worte...", sb: "Meine Bürgerschaft erstellen",
+    e4: "Willkommen, Bürger", h4: "Du gehörst<br>zur Erde.", i4: "Deine Antworten sind alles, was wir brauchen.", cl: "Zugehörigkeitsurkunde", ct: "Bürger der Erde", gd: "Verliehen an einen Menschen<br>des Planeten Erde", gt: "Verliehen an {name}", idl: "Bürgerschafts-ID", dtl: "Ausstellungsdatum",
+    mq: "„Hier gibt es keine Fremden. Es gibt nur ein Zuhause, und wir teilen es.“", ds: "Dies ist eine persönliche, symbolische Zugehörigkeitsurkunde, kein von einer Regierung ausgestelltes Ausweisdokument.", dl: "Urkunde herunterladen", rs: "Neu beginnen",
+    e5: "Nicht ganz", h5: "Bürgerschaft nicht gewährt.", p5: "Alle drei Antworten müssen Ja lauten. Du kannst jederzeit neu beginnen.", ta: "Erneut versuchen",
+    f1: "Projekt Erdbürgerschaft", f2: "Die Menschheit hat ein Zuhause.",
+    nm: "Name", mm: "Persönliche Botschaft", dc: "Erklärung", dt: "Der Inhaber bestätigt, dass er ein Mensch ist, sich auf der Erde befindet und die Menschen und die Erde liebt.",
+    fd: "Dies ist eine persönliche, symbolische Urkunde. Sie ist kein staatlich ausgestelltes Ausweisdokument, kein Nachweis einer rechtlichen Staatsangehörigkeit und kein Einreisedokument. Die ID wird zufällig von diesem Browser erzeugt und in keiner zentralen Datenbank registriert.",
+    qi: "Hier sind einige berühmte Zitate von Menschen, die auf der Erde gesagt wurden",
+    qs: ["Das ist ein kleiner Schritt für einen Menschen, aber ein riesiger Sprung für die Menschheit.", "Schau tief in die Natur, und du wirst alles besser verstehen.", "Ich habe einen Traum.", "Ein ungeprüftes Leben ist nicht lebenswert.", "Sei du selbst; alle anderen gibt es schon."],
+    ca: "ich! der Schöpfer des Projekts", cq: "Wir sind schlicht Produkte der Evolution, die besten Produkte, die in einer von Instinkten gelenkten Welt leben." },
+
+  ja: { name: "日本語",
+    b: "地球市民権", n: "ひとつの惑星。ひとつの人類。",
+    e1: "すべての人のための市民権", h1: "私たちは皆、<br>ここに属しています。", i1: "国境なし。パスポートなし。面倒な条件なし。必要なのは3つの質問だけ。", bg: "はじめる",
+    e2: "シンプルな宣言", ql: "質問", q: ["あなたは人間ですか？", "あなたは地球にいますか？", "あなたは人間と地球を愛していますか？"], y: "はい", no: "いいえ",
+    e3: "あなただけのものに", h3: "地球上の<br>あなたの居場所。", i3: "お名前と、自分と地球へのメッセージを追加してください。証明書に表示されます。", ln: "お名前", lm: "自分と地球へのメッセージ", pn: "証明書に表示される名前", pm: "約束、希望、あるいは数行の言葉...", sb: "市民権を作成する",
+    e4: "ようこそ、市民", h4: "あなたは<br>地球の一員です。", i4: "必要なのは、あなたの答えだけです。", cl: "所属の証明書", ct: "地球市民", gd: "地球という惑星に住む<br>ひとりの人間に授与", gt: "{name} に授与", idl: "市民権ID", dtl: "発行日",
+    mq: "「ここに外国人はいません。家はひとつ、私たちはそれを分かち合っています。」", ds: "これは個人的で象徴的な所属の証明書であり、政府が発行する身分証明書ではありません。", dl: "証明書をダウンロード", rs: "最初からやり直す",
+    e5: "惜しい", h5: "市民権は付与されませんでした。", p5: "3つの答えがすべて「はい」である必要があります。いつでもやり直せます。", ta: "もう一度試す",
+    f1: "地球市民プロジェクト", f2: "人類の家はひとつ。",
+    nm: "名前", mm: "個人メッセージ", dc: "宣言", dt: "保持者は、自分が人間であり、地球にいて、人間と地球を愛していることを表明します。",
+    fd: "これは個人的で象徴的な証明書です。政府発行の身分証明書、法的な国籍の証明、入国資格ではありません。IDはこのブラウザによってランダムに生成され、中央のデータベースには登録されません。",
+    qi: "地球上で人間が残した有名な言葉をいくつか",
+    qs: ["これは一人の人間にとっては小さな一歩だが、人類にとっては大きな飛躍である。", "自然を深く見つめなさい。そうすれば、すべてをよりよく理解できるでしょう。", "私には夢がある。", "吟味されない人生は生きるに値しない。", "あなた自身でありなさい。他の人の席はすでに埋まっている。"],
+    ca: "私！このプロジェクトの作者", cq: "私たちは進化の産物にすぎない。最高の産物として、本能に支配された世界に生きている。" },
+
+  sw: { name: "Kiswahili",
+    b: "Uraia wa Dunia", n: "Sayari moja. Ubinadamu mmoja.",
+    e1: "Uraia kwa kila mtu", h1: "Sote tuna mahali<br>hapa.", i1: "Hakuna mipaka. Hakuna pasipoti. Hakuna masharti magumu. Maswali matatu tu.", bg: "Anza",
+    e2: "Tamko rahisi", ql: "Swali", q: ["Je, wewe ni binadamu?", "Je, uko duniani?", "Je, unawapenda binadamu na Dunia?"], y: "Ndiyo", no: "Hapana",
+    e3: "Ifanye iwe yako", h3: "Mahali pako<br>duniani.", i3: "Ongeza jina lako na ujumbe kwako na kwa Dunia. Vitaonekana kwenye cheti chako.", ln: "Jina lako", lm: "Ujumbe wako kwako na kwa Dunia", pn: "Jina litakaloonekana kwenye cheti", pm: "Ahadi, matumaini, au maneno machache...", sb: "Tengeneza uraia wangu",
+    e4: "Karibu, raia", h4: "Wewe ni wa<br>Dunia.", i4: "Majibu yako ndiyo yote tunayohitaji.", cl: "Cheti cha kuwa sehemu ya Dunia", ct: "Raia wa Dunia", gd: "Kimetolewa kwa binadamu<br>wa sayari Dunia", gt: "Kimetolewa kwa {name}", idl: "Kitambulisho cha Uraia", dtl: "Tarehe ya kutolewa",
+    mq: "“Hakuna wageni hapa. Kuna nyumba moja tu, na tunaishiriki.”", ds: "Hiki ni cheti cha kibinafsi na cha ishara, si hati ya utambulisho iliyotolewa na serikali.", dl: "Pakua cheti", rs: "Anza upya",
+    e5: "Karibu", h5: "Uraia haukutolewa.", p5: "Majibu yote matatu lazima yawe ndiyo. Unaweza kuanza upya wakati wowote.", ta: "Jaribu tena",
+    f1: "Mradi wa Uraia wa Dunia", f2: "Ubinadamu una nyumba moja.",
+    nm: "Jina", mm: "Ujumbe wa kibinafsi", dc: "Tamko", dt: "Mmiliki anathibitisha kuwa yeye ni binadamu, yuko duniani, na anawapenda binadamu na Dunia.",
+    fd: "Hiki ni cheti cha kibinafsi na cha ishara. Si hati ya utambulisho iliyotolewa na serikali, wala uthibitisho wa uraia wa kisheria, wala kibali cha kuingia. Kitambulisho kinatengenezwa kwa nasibu na kivinjari hiki na hakijasajiliwa katika hifadhidata yoyote kuu.",
+    qi: "Hizi ni baadhi ya nukuu maarufu za binadamu zilizosemwa duniani",
+    qs: ["Hii ni hatua ndogo kwa mwanadamu, lakini ni kuruka kubwa kwa ubinadamu.", "Tazama kwa kina katika asili, na ndipo utakapoelewa kila kitu vizuri zaidi.", "Nina ndoto.", "Maisha yasiyochunguzwa hayafai kuishiwa.", "Kuwa wewe mwenyewe; wengine tayari wamechukuliwa."],
+    ca: "mimi! muumbaji wa mradi huu", cq: "Sisi ni matokeo tu ya mageuzi, matokeo bora zaidi, tunaoishi katika ulimwengu unaoendeshwa na silika." },
+
+  tr: { name: "Türkçe",
+    b: "Dünya Vatandaşlığı", n: "Tek gezegen. Tek insanlık.",
+    e1: "Herkes için bir vatandaşlık", h1: "Hepimiz<br>buraya aitiz.", i1: "Sınır yok. Pasaport yok. Karmaşık şartlar yok. Sadece üç soru.", bg: "Başla",
+    e2: "Basit bir bildiri", ql: "Soru", q: ["İnsan mısınız?", "Dünya'da mısınız?", "İnsanları ve Dünya'yı seviyor musunuz?"], y: "Evet", no: "Hayır",
+    e3: "Kendinize ait kılın", h3: "Dünya'daki<br>yeriniz.", i3: "Adınızı ve kendinize ve Dünya'ya bir mesaj ekleyin. Sertifikanızda görünecekler.", ln: "Adınız", lm: "Kendinize ve Dünya'ya mesajınız", pn: "Sertifikada görünecek ad", pm: "Bir söz, bir umut ya da birkaç kelime...", sb: "Vatandaşlığımı oluştur",
+    e4: "Hoş geldin, vatandaş", h4: "Sen Dünya'ya<br>aitsin.", i4: "İhtiyacımız olan tek şey cevaplarınız.", cl: "Aidiyet sertifikası", ct: "Dünya Vatandaşı", gd: "Dünya gezegenindeki bir<br>insana verilmiştir", gt: "{name} adına verilmiştir", idl: "Vatandaşlık Kimliği", dtl: "Düzenlenme tarihi",
+    mq: "“Burada yabancı yok. Tek bir yuva var ve onu paylaşıyoruz.”", ds: "Bu, kişisel ve sembolik bir aidiyet sertifikasıdır; hükümet tarafından verilmiş bir kimlik belgesi değildir.", dl: "Sertifikayı indir", rs: "Baştan başla",
+    e5: "Pek değil", h5: "Vatandaşlık verilmedi.", p5: "Üç cevabın da evet olması gerekir. İstediğiniz zaman baştan başlayabilirsiniz.", ta: "Tekrar dene",
+    f1: "Dünya Vatandaşlığı Projesi", f2: "İnsanlığın tek bir yuvası var.",
+    nm: "Ad", mm: "Kişisel mesaj", dc: "Bildiri", dt: "Sahibi, insan olduğunu, Dünya'da bulunduğunu ve insanları ve Dünya'yı sevdiğini beyan eder.",
+    fd: "Bu, kişisel ve sembolik bir sertifikadır. Hükümetin verdiği bir kimlik belgesi, yasal vatandaşlık kanıtı veya giriş belgesi değildir. Kimlik, bu tarayıcı tarafından rastgele üretilmiştir ve hiçbir merkezi veritabanına kaydedilmez.",
+    qi: "Dünya'da insanların söylediği bazı ünlü sözler",
+    qs: ["Bu bir insan için küçük bir adım, insanlık için büyük bir sıçrayış.", "Doğaya derinlemesine bak, o zaman her şeyi daha iyi anlayacaksın.", "Bir hayalim var.", "Sorgulanmamış bir hayat yaşamaya değmez.", "Kendin ol; diğer herkes zaten alınmış."],
+    ca: "ben! projenin yaratıcısı", cq: "Biz sadece evrimin ürünleriyiz, en iyi ürünler, içgüdülerin yönettiği bir dünyada yaşıyoruz." },
+
+  vi: { name: "Tiếng Việt",
+    b: "Công dân Trái Đất", n: "Một hành tinh. Một nhân loại.",
+    e1: "Một quyền công dân cho tất cả", h1: "Tất cả chúng ta<br>thuộc về nơi này.", i1: "Không biên giới. Không hộ chiếu. Không yêu cầu phức tạp. Chỉ ba câu hỏi.", bg: "Bắt đầu",
+    e2: "Một tuyên bố đơn giản", ql: "Câu hỏi", q: ["Bạn có phải là con người không?", "Bạn có đang ở trên Trái Đất không?", "Bạn có yêu con người và Trái Đất không?"], y: "Có", no: "Không",
+    e3: "Biến nó thành của bạn", h3: "Chỗ của bạn<br>trên Trái Đất.", i3: "Thêm tên của bạn và một lời nhắn cho chính bạn và Trái Đất. Chúng sẽ xuất hiện trên chứng nhận của bạn.", ln: "Tên của bạn", lm: "Lời nhắn của bạn gửi bản thân và Trái Đất", pn: "Tên hiển thị trên chứng nhận", pm: "Một lời hứa, một hy vọng, hoặc vài lời...", sb: "Tạo quyền công dân của tôi",
+    e4: "Chào mừng, công dân", h4: "Bạn thuộc về<br>Trái Đất.", i4: "Câu trả lời của bạn là tất cả những gì chúng tôi cần.", cl: "Chứng nhận thuộc về", ct: "Công dân Trái Đất", gd: "Trao cho một con người<br>của hành tinh Trái Đất", gt: "Trao cho {name}", idl: "Mã công dân", dtl: "Ngày cấp",
+    mq: "“Ở đây không có người xa lạ. Chỉ có một ngôi nhà, và chúng ta cùng chia sẻ nó.”", ds: "Đây là chứng nhận thuộc về mang tính cá nhân và biểu tượng, không phải giấy tờ tùy thân do chính phủ cấp.", dl: "Tải chứng nhận", rs: "Bắt đầu lại",
+    e5: "Chưa hẳn", h5: "Quyền công dân chưa được cấp.", p5: "Cả ba câu trả lời đều phải là có. Bạn luôn có thể bắt đầu lại.", ta: "Thử lại",
+    f1: "Dự án Công dân Trái Đất", f2: "Nhân loại chỉ có một ngôi nhà.",
+    nm: "Tên", mm: "Lời nhắn cá nhân", dc: "Tuyên bố", dt: "Người giữ xác nhận rằng mình là con người, đang ở trên Trái Đất, và yêu con người cùng Trái Đất.",
+    fd: "Đây là chứng nhận cá nhân và mang tính biểu tượng. Nó không phải giấy tờ tùy thân do chính phủ cấp, không phải bằng chứng quốc tịch hợp pháp và không phải giấy phép nhập cảnh. Mã được trình duyệt này tạo ngẫu nhiên và không được đăng ký vào bất kỳ cơ sở dữ liệu trung tâm nào.",
+    qi: "Một vài câu nói nổi tiếng của con người được nói ra trên Trái Đất",
+    qs: ["Đây là một bước nhỏ của một con người, một bước nhảy vọt vĩ đại của nhân loại.", "Hãy nhìn sâu vào thiên nhiên, rồi bạn sẽ hiểu mọi thứ rõ hơn.", "Tôi có một giấc mơ.", "Cuộc sống không được xem xét thì không đáng sống.", "Hãy là chính mình; những người khác đã có người làm rồi."],
+    ca: "tôi! người tạo ra dự án", cq: "Chúng ta chỉ là sản phẩm của tiến hóa, những sản phẩm tốt nhất, sống trong một thế giới do bản năng chi phối." },
+
+  ko: { name: "한국어",
+    b: "지구 시민권", n: "하나의 행성. 하나의 인류.",
+    e1: "모두를 위한 시민권", h1: "우리는 모두<br>이곳에 속해 있습니다.", i1: "국경도, 여권도, 복잡한 조건도 없습니다. 단지 세 가지 질문뿐입니다.", bg: "시작하기",
+    e2: "간단한 선언", ql: "질문", q: ["당신은 인간입니까?", "당신은 지구에 있습니까?", "당신은 인간과 지구를 사랑합니까?"], y: "예", no: "아니요",
+    e3: "나만의 것으로", h3: "지구에서의<br>당신의 자리.", i3: "이름과 자신과 지구에게 전하는 메시지를 추가하세요. 증서에 표시됩니다.", ln: "이름", lm: "자신과 지구에게 전하는 메시지", pn: "증서에 표시될 이름", pm: "약속, 희망, 혹은 몇 마디 말...", sb: "내 시민권 만들기",
+    e4: "환영합니다, 시민", h4: "당신은<br>지구에 속해 있습니다.", i4: "당신의 대답이면 충분합니다.", cl: "소속 증서", ct: "지구 시민", gd: "지구라는 행성의<br>한 인간에게 수여됨", gt: "{name}에게 수여됨", idl: "시민권 ID", dtl: "발급일",
+    mq: "“이곳에는 외국인이 없습니다. 오직 하나의 집이 있을 뿐이고, 우리는 그것을 함께 나눕니다.”", ds: "이것은 개인적이고 상징적인 소속 증서이며, 정부가 발급한 신분증이 아닙니다.", dl: "증서 다운로드", rs: "다시 시작",
+    e5: "아쉽네요", h5: "시민권이 부여되지 않았습니다.", p5: "세 가지 답변이 모두 ‘예’여야 합니다. 언제든 다시 시작할 수 있습니다.", ta: "다시 시도",
+    f1: "지구 시민권 프로젝트", f2: "인류에게는 하나의 집이 있습니다.",
+    nm: "이름", mm: "개인 메시지", dc: "선언문", dt: "소지자는 자신이 인간이며, 지구에 있고, 인간과 지구를 사랑함을 선언합니다.",
+    fd: "이것은 개인적이고 상징적인 증서입니다. 정부가 발급한 신분증, 법적 국적의 증명, 입국 자격이 아닙니다. ID는 이 브라우저에서 무작위로 생성되며 어떤 중앙 데이터베이스에도 등록되지 않습니다.",
+    qi: "지구에서 인간이 남긴 유명한 말들",
+    qs: ["이것은 한 인간에게는 작은 걸음이지만, 인류에게는 거대한 도약이다.", "자연을 깊이 들여다보라. 그러면 모든 것을 더 잘 이해하게 될 것이다.", "나에게는 꿈이 있습니다.", "검토되지 않은 삶은 살 가치가 없다.", "자기 자신이 되어라. 다른 자리는 이미 다 차 있다."],
+    ca: "나! 이 프로젝트의 창작자", cq: "우리는 진화의 산물일 뿐이다. 최고의 산물로서, 본능이 지배하는 세상에 살고 있다." },
+
+  ta: { name: "தமிழ்",
+    b: "பூமி குடியுரிமை", n: "ஒரு கிரகம். ஒரே மனிதகுலம்.",
+    e1: "அனைவருக்குமான குடியுரிமை", h1: "நாம் அனைவரும்<br>இங்கே சேர்ந்தவர்கள்.", i1: "எல்லைகள் இல்லை. கடவுச்சீட்டுகள் இல்லை. சிக்கலான நிபந்தனைகள் இல்லை. மூன்று கேள்விகள் மட்டுமே.", bg: "தொடங்கு",
+    e2: "ஒரு எளிய அறிவிப்பு", ql: "கேள்வி", q: ["நீங்கள் மனிதரா?", "நீங்கள் பூமியில் இருக்கிறீர்களா?", "நீங்கள் மனிதர்களையும் பூமியையும் நேசிக்கிறீர்களா?"], y: "ஆம்", no: "இல்லை",
+    e3: "உங்களுக்கே உரியதாக்குங்கள்", h3: "பூமியில்<br>உங்கள் இடம்.", i3: "உங்கள் பெயரையும், உங்களுக்கும் பூமிக்குமான ஒரு செய்தியையும் சேர்க்கவும். அவை உங்கள் சான்றிதழில் தோன்றும்.", ln: "உங்கள் பெயர்", lm: "உங்களுக்கும் பூமிக்குமான உங்கள் செய்தி", pn: "சான்றிதழில் இடம்பெறும் பெயர்", pm: "ஒரு வாக்குறுதி, ஒரு நம்பிக்கை, அல்லது சில வார்த்தைகள்...", sb: "என் குடியுரிமையை உருவாக்கு",
+    e4: "வரவேற்கிறோம், குடிமகனே", h4: "நீங்கள் பூமிக்குச்<br>சொந்தமானவர்.", i4: "உங்கள் பதில்களே எங்களுக்குப் போதும்.", cl: "சொந்தம் என்பதற்கான சான்றிதழ்", ct: "பூமியின் குடிமகன்", gd: "பூமி கிரகத்தின் ஒரு<br>மனிதருக்கு வழங்கப்பட்டது", gt: "{name} அவர்களுக்கு வழங்கப்பட்டது", idl: "குடியுரிமை அடையாள எண்", dtl: "வழங்கிய தேதி",
+    mq: "“இங்கே அந்நியர்கள் யாருமில்லை. ஒரே ஒரு வீடு உள்ளது, அதை நாம் பகிர்ந்துகொள்கிறோம்.”", ds: "இது தனிப்பட்ட, அடையாளபூர்வமான சொந்தம் என்பதற்கான சான்றிதழ்; அரசு வழங்கும் அடையாள ஆவணம் அல்ல.", dl: "சான்றிதழைப் பதிவிறக்கு", rs: "மீண்டும் தொடங்கு",
+    e5: "கிட்டத்தட்ட", h5: "குடியுரிமை வழங்கப்படவில்லை.", p5: "மூன்று பதில்களும் “ஆம்” ஆக இருக்க வேண்டும். நீங்கள் எப்போது வேண்டுமானாலும் மீண்டும் தொடங்கலாம்.", ta: "மீண்டும் முயற்சி",
+    f1: "பூமி குடியுரிமைத் திட்டம்", f2: "மனிதகுலத்துக்கு ஒரே வீடு.",
+    nm: "பெயர்", mm: "தனிப்பட்ட செய்தி", dc: "அறிவிப்பு", dt: "தாம் மனிதர் என்றும், பூமியில் இருக்கிறார் என்றும், மனிதர்களையும் பூமியையும் நேசிக்கிறார் என்றும் சான்றிதழ் வைத்திருப்பவர் உறுதிப்படுத்துகிறார்.",
+    fd: "இது தனிப்பட்ட, அடையாளபூர்வமான சான்றிதழ். இது அரசு வழங்கிய அடையாள ஆவணம், சட்டபூர்வ குடியுரிமைக்கான சான்று அல்லது நுழைவு அனுமதி அல்ல. அடையாள எண் இந்த உலாவியால் தற்செயலாக உருவாக்கப்பட்டது; எந்த மையத் தரவுத்தளத்திலும் பதிவு செய்யப்படவில்லை.",
+    qi: "பூமியில் மனிதர்கள் கூறிய சில புகழ்பெற்ற வாசகங்கள்",
+    qs: ["இது ஒரு மனிதனுக்குச் சிறிய அடி, மனிதகுலத்துக்குப் பெரிய பாய்ச்சல்.", "இயற்கையை ஆழமாகப் பாருங்கள், அப்போது எல்லாவற்றையும் நன்றாகப் புரிந்துகொள்வீர்கள்.", "எனக்கு ஒரு கனவு இருக்கிறது.", "ஆராயப்படாத வாழ்க்கை வாழத் தகுதியற்றது.", "நீயாக இரு; மற்றவர்கள் ஏற்கனவே எடுக்கப்பட்டுவிட்டனர்."],
+    ca: "நான்! இந்தத் திட்டத்தை உருவாக்கியவன்", cq: "நாம் வெறும் பரிணாமத்தின் விளைவுகள், சிறந்த விளைவுகள், உள்ளுணர்வுகளால் இயங்கும் உலகில் வாழ்கிறோம்." },
+
+  te: { name: "తెలుగు",
+    b: "భూమి పౌరసత్వం", n: "ఒక గ్రహం. ఒకే మానవత్వం.",
+    e1: "అందరికీ ఒక పౌరసత్వం", h1: "మనమంతా<br>ఇక్కడివాళ్ళమే.", i1: "సరిహద్దులు లేవు. పాస్‌పోర్టులు లేవు. సంక్లిష్ట నిబంధనలు లేవు. కేవలం మూడు ప్రశ్నలు.", bg: "ప్రారంభించండి",
+    e2: "ఒక సరళమైన ప్రకటన", ql: "ప్రశ్న", q: ["మీరు మనిషా?", "మీరు భూమిపై ఉన్నారా?", "మీరు మనుషులను, భూమిని ప్రేమిస్తున్నారా?"], y: "అవును", no: "కాదు",
+    e3: "దీన్ని మీదిగా చేసుకోండి", h3: "భూమిపై<br>మీ స్థానం.", i3: "మీ పేరు, మీకూ భూమికీ ఒక సందేశం జోడించండి. అవి మీ సర్టిఫికెట్‌పై కనిపిస్తాయి.", ln: "మీ పేరు", lm: "మీకూ భూమికీ మీ సందేశం", pn: "సర్టిఫికెట్‌పై కనిపించే పేరు", pm: "ఒక వాగ్దానం, ఒక ఆశ, లేదా కొన్ని మాటలు...", sb: "నా పౌరసత్వాన్ని సృష్టించు",
+    e4: "స్వాగతం, పౌరుడా", h4: "మీరు భూమికి<br>చెందినవారు.", i4: "మీ సమాధానాలే మాకు కావలసినవన్నీ.", cl: "చెందినవారనే ధృవీకరణ పత్రం", ct: "భూమి పౌరుడు", gd: "భూమి గ్రహానికి చెందిన<br>ఒక మనిషికి ప్రదానం", gt: "{name} గారికి ప్రదానం", idl: "పౌరసత్వ ఐడీ", dtl: "జారీ చేసిన తేదీ",
+    mq: "“ఇక్కడ పరాయివారు ఎవరూ లేరు. ఒకే ఇల్లు ఉంది, దాన్ని మనం పంచుకుంటున్నాం.”", ds: "ఇది వ్యక్తిగత, ప్రతీకాత్మక ధృవీకరణ పత్రం; ప్రభుత్వం జారీ చేసిన గుర్తింపు పత్రం కాదు.", dl: "సర్టిఫికెట్ డౌన్‌లోడ్ చేయండి", rs: "మళ్ళీ మొదలుపెట్టండి",
+    e5: "దాదాపు", h5: "పౌరసత్వం ఇవ్వబడలేదు.", p5: "మూడు సమాధానాలూ “అవును” అయి ఉండాలి. మీరు ఎప్పుడైనా మళ్ళీ మొదలుపెట్టవచ్చు.", ta: "మళ్ళీ ప్రయత్నించండి",
+    f1: "భూమి పౌరసత్వ ప్రాజెక్ట్", f2: "మానవాళికి ఒకే ఇల్లు.",
+    nm: "పేరు", mm: "వ్యక్తిగత సందేశం", dc: "ప్రకటన", dt: "తాను మనిషినని, భూమిపై ఉన్నానని, మనుషులను భూమిని ప్రేమిస్తున్నానని ఈ పత్రం కలిగినవారు ధృవీకరిస్తున్నారు.",
+    fd: "ఇది వ్యక్తిగత, ప్రతీకాత్మక సర్టిఫికెట్. ఇది ప్రభుత్వం జారీ చేసిన గుర్తింపు పత్రం, చట్టబద్ధ జాతీయతకు రుజువు లేదా ప్రవేశ అనుమతి కాదు. ఐడీని ఈ బ్రౌజర్ యాదృచ్ఛికంగా సృష్టించింది; ఏ కేంద్ర డేటాబేస్‌లోనూ నమోదు కాలేదు.",
+    qi: "భూమిపై మనుషులు చెప్పిన కొన్ని ప్రసిద్ధ మాటలు",
+    qs: ["ఇది ఒక మనిషికి చిన్న అడుగు, మానవాళికి గొప్ప ముందడుగు.", "ప్రకృతిని లోతుగా చూడండి, అప్పుడు మీరు అన్నింటినీ బాగా అర్థం చేసుకుంటారు.", "నాకు ఒక కల ఉంది.", "పరిశీలించని జీవితం జీవించదగినది కాదు.", "నీలా నువ్వు ఉండు; మిగతా వాళ్ళందరూ ఇప్పటికే తీసుకోబడ్డారు."],
+    ca: "నేను! ఈ ప్రాజెక్ట్ సృష్టికర్త", cq: "మనం కేవలం పరిణామ ఫలితాలం, అత్యుత్తమ ఫలితాలం, ప్రవృత్తులు నడిపించే ప్రపంచంలో జీవిస్తున్నాం." },
+
+  mr: { name: "मराठी",
+    b: "पृथ्वी नागरिकत्व", n: "एक ग्रह. एक मानवता.",
+    e1: "सर्वांसाठी एक नागरिकत्व", h1: "आपण सगळे<br>इथलेच आहोत.", i1: "सीमा नाहीत. पासपोर्ट नाहीत. क्लिष्ट अटी नाहीत. फक्त तीन प्रश्न.", bg: "सुरू करा",
+    e2: "एक साधी घोषणा", ql: "प्रश्न", q: ["तुम्ही माणूस आहात का?", "तुम्ही पृथ्वीवर आहात का?", "तुम्हाला माणसांवर आणि पृथ्वीवर प्रेम आहे का?"], y: "हो", no: "नाही",
+    e3: "ते तुमचे करा", h3: "पृथ्वीवर<br>तुमची जागा.", i3: "तुमचे नाव आणि स्वतःसाठी व पृथ्वीसाठी एक संदेश जोडा. ते तुमच्या प्रमाणपत्रावर दिसतील.", ln: "तुमचे नाव", lm: "स्वतःसाठी आणि पृथ्वीसाठी तुमचा संदेश", pn: "प्रमाणपत्रावर दिसणारे नाव", pm: "एक वचन, एक आशा, किंवा काही शब्द...", sb: "माझे नागरिकत्व तयार करा",
+    e4: "स्वागत आहे, नागरिक", h4: "तुम्ही पृथ्वीचे<br>आहात.", i4: "आम्हाला फक्त तुमची उत्तरे हवी होती.", cl: "आपलेपणाचे प्रमाणपत्र", ct: "पृथ्वीचा नागरिक", gd: "पृथ्वी ग्रहावरील एका<br>माणसाला प्रदान", gt: "{name} यांना प्रदान", idl: "नागरिकत्व आयडी", dtl: "जारी केल्याची तारीख",
+    mq: "“इथे कोणीही परके नाही. घर एकच आहे, आणि आपण ते वाटून घेतो.”", ds: "हे वैयक्तिक, प्रतीकात्मक आपलेपणाचे प्रमाणपत्र आहे; सरकारने दिलेले ओळखपत्र नाही.", dl: "प्रमाणपत्र डाउनलोड करा", rs: "पुन्हा सुरू करा",
+    e5: "जवळजवळ", h5: "नागरिकत्व दिले गेले नाही.", p5: "तिन्ही उत्तरे “हो” असली पाहिजेत. तुम्ही कधीही पुन्हा सुरू करू शकता.", ta: "पुन्हा प्रयत्न करा",
+    f1: "पृथ्वी नागरिकत्व प्रकल्प", f2: "मानवतेचे घर एकच आहे.",
+    nm: "नाव", mm: "वैयक्तिक संदेश", dc: "घोषणा", dt: "धारक हे प्रमाणित करतो की तो माणूस आहे, पृथ्वीवर आहे, आणि माणसांवर व पृथ्वीवर प्रेम करतो.",
+    fd: "हे वैयक्तिक आणि प्रतीकात्मक प्रमाणपत्र आहे. हे सरकारने दिलेले ओळखपत्र, कायदेशीर राष्ट्रीयत्वाचा पुरावा किंवा प्रवेशपत्र नाही. आयडी या ब्राउझरने यादृच्छिकपणे तयार केला आहे आणि कोणत्याही केंद्रीय डेटाबेसमध्ये नोंदवलेला नाही.",
+    qi: "पृथ्वीवर माणसांनी सांगितलेली काही प्रसिद्ध वचने",
+    qs: ["हे एका माणसासाठी एक छोटे पाऊल आहे, पण मानवजातीसाठी एक मोठी झेप.", "निसर्गात खोलवर पहा, मग तुम्हाला सर्व काही अधिक चांगले समजेल.", "माझे एक स्वप्न आहे.", "तपासून न पाहिलेले जीवन जगण्यास योग्य नाही.", "स्वतः व्हा; बाकी सर्व जागा आधीच भरलेल्या आहेत."],
+    ca: "मी! या प्रकल्पाचा निर्माता", cq: "आपण फक्त उत्क्रांतीची उत्पादने आहोत, सर्वोत्तम उत्पादने, प्रवृत्तींनी चालणाऱ्या जगात राहणारी." },
+
+  it: { name: "Italiano",
+    b: "Cittadinanza della Terra", n: "Un pianeta. Un'umanità.",
+    e1: "Una cittadinanza per tutti", h1: "Apparteniamo tutti<br>a questo luogo.", i1: "Niente confini. Niente passaporti. Nessun requisito complicato. Solo tre domande.", bg: "Inizia",
+    e2: "Una dichiarazione semplice", ql: "Domanda", q: ["Sei umano?", "Sei sulla Terra?", "Ami gli esseri umani e la Terra?"], y: "Sì", no: "No",
+    e3: "Rendila tua", h3: "Il tuo posto<br>sulla Terra.", i3: "Aggiungi il tuo nome e un messaggio per te stesso e per la Terra. Appariranno sul tuo certificato.", ln: "Il tuo nome", lm: "Il tuo messaggio per te stesso e per la Terra", pn: "Nome da mostrare sul certificato", pm: "Una promessa, una speranza o poche parole...", sb: "Crea la mia cittadinanza",
+    e4: "Benvenuto, cittadino", h4: "Appartieni<br>alla Terra.", i4: "Le tue risposte sono tutto ciò che ci serve.", cl: "Certificato di appartenenza", ct: "Cittadino della Terra", gd: "Conferito a un essere umano<br>del pianeta Terra", gt: "Conferito a {name}", idl: "ID di cittadinanza", dtl: "Data di emissione",
+    mq: "“Qui non ci sono stranieri. C'è una sola casa, e la condividiamo.”", ds: "Questo è un certificato di appartenenza personale e simbolico, non un documento d'identità rilasciato da un governo.", dl: "Scarica il certificato", rs: "Ricomincia",
+    e5: "Non proprio", h5: "Cittadinanza non concessa.", p5: "Tutte e tre le risposte devono essere sì. Puoi sempre ricominciare.", ta: "Riprova",
+    f1: "Progetto Cittadinanza della Terra", f2: "L'umanità ha una sola casa.",
+    nm: "Nome", mm: "Messaggio personale", dc: "Dichiarazione", dt: "Il titolare afferma di essere umano, di trovarsi sulla Terra e di amare gli esseri umani e la Terra.",
+    fd: "Questo è un certificato personale e simbolico. Non è un documento d'identità rilasciato da un governo, né una prova di cittadinanza legale, né un titolo d'ingresso. L'ID è generato casualmente da questo browser e non è registrato in alcun database centrale.",
+    qi: "Ecco alcune frasi famose pronunciate da esseri umani sulla Terra",
+    qs: ["Questo è un piccolo passo per un uomo, un grande balzo per l'umanità.", "Guarda in profondità nella natura, e comprenderai meglio ogni cosa.", "Ho un sogno.", "Una vita non esaminata non vale la pena di essere vissuta.", "Sii te stesso; tutti gli altri sono già presi."],
+    ca: "io! il creatore del progetto", cq: "Siamo semplicemente prodotti dell'evoluzione, i migliori prodotti, che vivono in un mondo governato dagli istinti." },
+
+  fa: { name: "فارسی", rtl: true,
+    b: "شهروندی زمین", n: "یک سیاره. یک بشریت.",
+    e1: "شهروندی برای همه", h1: "همهٔ ما<br>به اینجا تعلق داریم.", i1: "بدون مرز. بدون گذرنامه. بدون شرایط پیچیده. فقط سه پرسش.", bg: "شروع",
+    e2: "یک بیانیهٔ ساده", ql: "پرسش", q: ["آیا شما انسان هستید؟", "آیا شما روی زمین هستید؟", "آیا انسان‌ها و زمین را دوست دارید؟"], y: "بله", no: "نه",
+    e3: "آن را از آنِ خود کنید", h3: "جای شما<br>روی زمین.", i3: "نام خود و پیامی برای خودتان و زمین اضافه کنید. این‌ها روی گواهی شما نمایش داده می‌شوند.", ln: "نام شما", lm: "پیام شما به خودتان و زمین", pn: "نامی که روی گواهی نمایش داده می‌شود", pm: "یک قول، یک امید، یا چند کلمه...", sb: "شهروندی من را بساز",
+    e4: "خوش آمدید، شهروند", h4: "شما به زمین<br>تعلق دارید.", i4: "پاسخ‌های شما تمام چیزی است که نیاز داریم.", cl: "گواهی تعلق", ct: "شهروند زمین", gd: "اعطا شده به انسانی<br>از سیارهٔ زمین", gt: "اعطا شده به {name}", idl: "شناسهٔ شهروندی", dtl: "تاریخ صدور",
+    mq: "«اینجا هیچ بیگانه‌ای نیست. فقط یک خانه وجود دارد و ما آن را با هم تقسیم می‌کنیم.»", ds: "این یک گواهی تعلق شخصی و نمادین است، نه مدرک شناسایی صادرشده از سوی دولت.", dl: "دانلود گواهی", rs: "شروع دوباره",
+    e5: "کمی مانده", h5: "شهروندی اعطا نشد.", p5: "هر سه پاسخ باید «بله» باشند. همیشه می‌توانید دوباره شروع کنید.", ta: "دوباره تلاش کنید",
+    f1: "پروژهٔ شهروندی زمین", f2: "بشریت یک خانه دارد.",
+    nm: "نام", mm: "پیام شخصی", dc: "بیانیه", dt: "دارندهٔ این گواهی تأیید می‌کند که انسان است، روی زمین است و انسان‌ها و زمین را دوست دارد.",
+    fd: "این یک گواهی شخصی و نمادین است. مدرک شناسایی صادرشده از سوی دولت، گواهی تابعیت قانونی یا مجوز ورود نیست. شناسه به‌صورت تصادفی توسط این مرورگر ساخته شده و در هیچ پایگاه دادهٔ مرکزی ثبت نشده است.",
+    qi: "چند سخن مشهور از انسان‌ها که روی زمین گفته شده‌اند",
+    qs: ["این گامی کوچک برای یک انسان است، اما جهشی بزرگ برای بشریت.", "در طبیعت ژرف بنگر، آنگاه همه‌چیز را بهتر خواهی فهمید.", "من رویایی دارم.", "زندگی وارسی‌نشده ارزش زیستن ندارد.", "خودت باش؛ بقیه پیش‌تر برداشته شده‌اند."],
+    ca: "من! سازندهٔ این پروژه", cq: "ما صرفاً محصولات تکامل هستیم، بهترین محصولات، که در جهانی زندگی می‌کنند که غریزه‌ها بر آن حکم می‌رانند." }
+};
+/* END I18N */
+
+const QUOTE_AUTHORS = ["Neil Armstrong", "Albert Einstein", "Martin Luther King Jr.", "Socrates", "Oscar Wilde"];
 const sections = ["welcome", "quiz", "details", "success", "declined"];
+let current = 0;
 let certificate = null;
+let lang = "en";
+
+function t(key) {
+  const d = I18N[lang];
+  return (d && d[key] !== undefined) ? d[key] : I18N.en[key];
+}
+function up(s) { return s.toLocaleUpperCase(lang); }
+
+function pickInitialLanguage() {
+  try {
+    const saved = localStorage.getItem("coe-lang");
+    if (saved && I18N[saved]) return saved;
+  } catch (e) {}
+  const prefs = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language || "en"];
+  for (const p of prefs) {
+    let code = String(p).toLowerCase().split("-")[0];
+    if (code === "in") code = "id";
+    if (I18N[code]) return code;
+  }
+  return "en";
+}
+
 function show(id) { sections.forEach(name => document.getElementById(name).classList.toggle("hidden", name !== id)); }
+
 function updateQuestion() {
-  document.getElementById("step").textContent = `QUESTION 0${current + 1} / 03`;
-  document.getElementById("question").textContent = questions[current];
+  document.getElementById("step").textContent = `${up(t("ql"))} 0${current + 1} / 03`;
+  document.getElementById("question").textContent = t("q")[current];
   document.querySelectorAll(".progress span").forEach((bar, i) => bar.classList.toggle("active", i <= current));
 }
+
+function refreshCertificate() {
+  const nameEl = document.getElementById("certificate-name");
+  if (!certificate) { nameEl.innerHTML = t("gd"); return; }
+  nameEl.textContent = t("gt").replace("{name}", () => certificate.name);
+  document.getElementById("certificate-id").textContent = `${up(t("idl"))}: ${certificate.id}`;
+  document.getElementById("certificate-date").textContent = `${up(t("dtl"))}: ${certificate.date}`;
+  document.getElementById("certificate-message").textContent = `“${certificate.message}”`;
+}
+
+function applyLanguage() {
+  const d = I18N[lang];
+  document.documentElement.lang = lang;
+  document.documentElement.dir = d.rtl ? "rtl" : "ltr";
+  document.title = t("ct");
+  document.querySelectorAll("[data-i]").forEach(el => {
+    const v = t(el.dataset.i);
+    if (el.dataset.html) el.innerHTML = v;
+    else el.textContent = el.dataset.up ? up(v) : v;
+  });
+  document.querySelectorAll("[data-ph]").forEach(el => { el.placeholder = t(el.dataset.ph); });
+  updateQuestion();
+  refreshCertificate();
+  document.getElementById("lang").value = lang;
+}
+
+function setLanguage(code) {
+  if (!I18N[code]) return;
+  lang = code;
+  try { localStorage.setItem("coe-lang", code); } catch (e) {}
+  applyLanguage();
+}
+
+const picker = document.getElementById("lang");
+Object.keys(I18N).forEach(code => {
+  const opt = document.createElement("option");
+  opt.value = code;
+  opt.textContent = I18N[code].name;
+  picker.appendChild(opt);
+});
+picker.addEventListener("change", () => setLanguage(picker.value));
+
 function start() { current = 0; updateQuestion(); show("quiz"); }
 document.getElementById("begin").addEventListener("click", start);
-document.getElementById("yes").addEventListener("click", () => { current++; if (current === questions.length) show("details"); else updateQuestion(); });
+document.getElementById("yes").addEventListener("click", () => { current++; if (current === t("q").length) show("details"); else updateQuestion(); });
 document.getElementById("no").addEventListener("click", () => show("declined"));
 document.getElementById("restart").addEventListener("click", () => show("welcome"));
 document.getElementById("tryagain").addEventListener("click", start);
@@ -173,49 +587,35 @@ document.getElementById("details-form").addEventListener("submit", event => {
   const message = document.getElementById("citizen-message").value.trim();
   if (!name || !message) return;
   certificate = { id: makeId(), name, message, date: new Date().toISOString().slice(0, 10) };
-  document.getElementById("certificate-name").textContent = `Granted to ${name}`;
-  document.getElementById("certificate-id").textContent = `CITIZENSHIP ID: ${certificate.id}`;
-  document.getElementById("certificate-date").textContent = `DATE ISSUED: ${certificate.date}`;
-  document.getElementById("certificate-message").textContent = `“${message}”`;
+  refreshCertificate();
   show("success");
 });
 document.getElementById("download").addEventListener("click", () => {
   if (!certificate) return;
+  const qs = t("qs");
   const contents = [
-    "CITIZEN OF EARTH",
-    
-    "CERTIFICATE OF BELONGING",
-    
+    up(t("ct")),
+    up(t("cl")),
     "",
-    `Name: ${certificate.name}`,
-    `Citizenship ID: ${certificate.id}`,
-    `Date issued: ${certificate.date}`,
+    `${t("nm")}: ${certificate.name}`,
+    `${t("idl")}: ${certificate.id}`,
+    `${t("dtl")}: ${certificate.date}`,
     "",
-    
-    "Personal message:",
+    `${t("mm")}:`,
     certificate.message,
     "",
-    
-    "DECLARATION",
-    "The holder affirms that they are human, are on Earth, and love humans and Earth.",
+    up(t("dc")),
+    t("dt"),
     "",
-    "This is a personal, symbolic certificate. It is not a government-issued identity document, proof of legal nationality, or entry credential. The ID is randomly generated by this browser and is not registered in a central database.",
-    
-    "here are some famous quotes by humans that were made on earth",
-    
-    "That's one small step for a man, one giant leap for mankind. by neil armstrong",
-    
-    "Look deep into nature, and then you will understand everything better. by albert einstein",
-    
-    "I Have A Dream. by martin luther king",
-    
-    "The unexamined life is not worth living. by socrates",
-    
-    "Be yourself; everyone else is already taken. by oscar wilde",
-    
-    "we are simply evolutionary outputs, the best outputs. living in in a world run by instincts. by me! the creator of the project",
-  ].join("\\n");
-  const blob = new Blob([contents], { type: "text/plain;charset=utf-8" });
+    t("fd"),
+    "",
+    t("qi"),
+    "",
+    ...qs.map((q, i) => `“${q}” — ${QUOTE_AUTHORS[i]}`),
+    "",
+    `“${t("cq")}” — ${t("ca")}`,
+  ].join("\n");
+  const blob = new Blob(["\uFEFF" + contents], { type: "text/plain;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
@@ -223,6 +623,8 @@ document.getElementById("download").addEventListener("click", () => {
   link.click();
   URL.revokeObjectURL(url);
 });
+
+setLanguage(pickInitialLanguage());
 </script>
 </body>
 </html>
