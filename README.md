@@ -1,3 +1,5 @@
+# PLEASE READ THE [ToS](https://github.com/kiwi0123/citizenofearth/blob/main/ToS)
+
 # citizenofearth
 🌍 Citizen of Earth
 
